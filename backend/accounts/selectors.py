@@ -15,6 +15,7 @@ def get_user(username: str) -> User:
     Raises:
         NotFound: Если пользователь не найден.
     """
+    
     user = User.objects.filter(username=username).first()
 
     if not user:

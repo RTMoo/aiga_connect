@@ -10,7 +10,6 @@ class RegistrationSerializer(serializers.Serializer):
     role = serializers.ChoiceField(choices=User.RoleChoices.choices, required=True)
 
 
-
 class ConfirmCodeSerializer(serializers.Serializer):
     email = serializers.EmailField()
     code = serializers.CharField()
