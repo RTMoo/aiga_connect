@@ -7,7 +7,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenBlacklistView,
 )
-from accounts.serializers import RegistrationSerializer, ConfirmCodeSerializer
+from accounts.serializers import RegistrationSerializer, ConfirmCodeSerializer, CustomTokenObtainPairSerializer
 from accounts.utils import set_jwt_token
 from accounts.models import User
 from accounts.services import register_user, confirm_code
@@ -17,6 +17,8 @@ class LoginView(TokenObtainPairView):
     """
     Логин и хранение токена в HttpOnly Cookies
     """
+
+    serializer_class = CustomTokenObtainPairSerializer
 
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
