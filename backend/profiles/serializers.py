@@ -1,0 +1,34 @@
+from rest_framework import serializers
+
+
+class BaseProfileSerializer(serializers.Serializer):
+    username = serializers.CharField(
+        max_length=32, source="user.username", read_only=True
+    )
+    first_name = serializers.CharField(max_length=32)
+    last_name = serializers.CharField(max_length=32)
+    birth_date = serializers.DateField(required=False, allow_null=True)
+    phone = serializers.CharField(max_length=20, required=False, allow_blank=True)
+    updated_at = serializers.DateTimeField(read_only=True)
+    created_at = serializers.DateTimeField(read_only=True)
+
+
+class TrainerProfileSerializer(BaseProfileSerializer):
+    bio = serializers.CharField(required=False, allow_blank=True)
+    training_zone_address = serializers.CharField(max_length=255)
+    monthly_price = serializers.DecimalField(max_digits=10, decimal_places=2)
+
+
+class ParentProfileSerializer(BaseProfileSerializer):
+    address = serializers.CharField(max_length=255, required=False, allow_blank=True)
+
+
+class ChildProfileSerializer(BaseProfileSerializer):
+    height_cm = serializers.IntegerField(required=False, allow_null=True)
+    weight_kg = serializers.IntegerField(required=False, allow_null=True)
+    belt_grade = serializers.CharField(
+        max_length=50, required=False, allow_null=True, allow_blank=True
+    )
+    discipline = serializers.CharField(
+        max_length=100, required=False, allow_null=True, allow_blank=True
+    )

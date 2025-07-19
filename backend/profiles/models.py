@@ -22,7 +22,9 @@ class BaseProfile(models.Model):
 class TrainerProfile(BaseProfile):
     bio = models.TextField(blank=True)
     training_zone_address = models.CharField(max_length=255)
-    monthly_price = models.DecimalField(max_digits=10, decimal_places=2)
+    monthly_price = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
 
     def __str__(self):
         return f"Тренер: {self.get_full_name()}"
@@ -37,9 +39,9 @@ class ParentProfile(BaseProfile):
 
 class ChildProfile(BaseProfile):
     parent = models.ForeignKey(
-        "accounts.User",
+        "profiles.ParentProfile",
         on_delete=models.CASCADE,
-        related_name="children",
+        related_name="childrens",
     )
 
     height_cm = models.PositiveIntegerField(null=True, blank=True)

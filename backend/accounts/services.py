@@ -3,6 +3,8 @@ from django.core.cache import cache
 from rest_framework.exceptions import ValidationError, NotFound
 from accounts.tasks import send_confirmation_email
 from accounts.models import User
+from profiles.services import create_profile
+from profiles.selectors import get_profile
 
 
 def register_user(data: dict[str, Any], sender: User) -> None:
@@ -42,6 +44,11 @@ def register_user(data: dict[str, Any], sender: User) -> None:
         user.save()
     else:
         user = User.objects.create_user(**data)
+        if user.role == User.RoleChoices.CHILD:
+            parent = get_profile(username=sender.username, role=User.RoleChoices.PARENT)
+            create_profile(user=user, parent=parent)
+        else:
+            create_profile(user=user)
 
     send_confirmation_email.delay(user.email)
 
