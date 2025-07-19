@@ -21,6 +21,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data = super().validate(attrs)
 
         if not self.user.email_verified:
-            raise ValidationError({"email": "Вы должны подтвердить свою почту, чтобы войти."})
+            raise ValidationError(
+                {"email": "Вы должны подтвердить свою почту, чтобы войти."}
+            )
 
         return data
