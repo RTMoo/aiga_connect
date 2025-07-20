@@ -1,6 +1,12 @@
 from rest_framework import serializers
 
 
+class DisciplineSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField(max_length=128)
+    slug = serializers.SlugField(max_length=128)
+
+
 class BaseProfileSerializer(serializers.Serializer):
     username = serializers.CharField(
         max_length=32, source="user.username", read_only=True
@@ -17,6 +23,10 @@ class TrainerProfileSerializer(BaseProfileSerializer):
     bio = serializers.CharField(required=False, allow_blank=True)
     training_zone_address = serializers.CharField(max_length=255)
     monthly_price = serializers.DecimalField(max_digits=10, decimal_places=2)
+    disciplines = DisciplineSerializer(many=True, read_only=True)
+    disciplines_ids = serializers.ListField(
+        child=serializers.IntegerField(), write_only=True, required=False
+    )
 
 
 class ParentProfileSerializer(BaseProfileSerializer):
@@ -29,6 +39,7 @@ class ChildProfileSerializer(BaseProfileSerializer):
     belt_grade = serializers.CharField(
         max_length=50, required=False, allow_null=True, allow_blank=True
     )
-    discipline = serializers.CharField(
-        max_length=100, required=False, allow_null=True, allow_blank=True
+    disciplines = DisciplineSerializer(many=True, read_only=True)
+    disciplines_ids = serializers.ListField(
+        child=serializers.IntegerField(), write_only=True, required=False
     )

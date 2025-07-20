@@ -24,6 +24,10 @@ def edit_profile(
     for key, value in data.items():
         setattr(profile, key, value)
 
+    discipilines_ids = data.get("discipilines_ids", None)
+    if discipilines_ids:
+        profile.discipilines.set(discipilines_ids)
+
     profile.save()
 
     return profile
