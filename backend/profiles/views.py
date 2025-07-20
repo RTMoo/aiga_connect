@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.permissions import IsAuthenticated
-from profiles.permissions import (
+from commons.permissions import (
     IsParentOfChild,
     IsTrainer,
     IsOwner,
