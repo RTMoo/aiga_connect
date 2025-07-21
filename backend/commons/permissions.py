@@ -4,7 +4,7 @@ from accounts.models import User
 
 class IsParentOfChild(BasePermission):
     """
-    Разрешает доступ только родителю, который является владельцем профиля ребёнка.
+    Разрешает доступ только родителю, который связан с ребёнком.
     """
 
     def has_object_permission(self, request, view, obj):
@@ -29,16 +29,25 @@ class IsTrainer(BasePermission):
 
 class IsOwner(BasePermission):
     """
-    Разрешает доступ только владельцу профиля.
+    Разрешает доступ только владельцу обьекта.
     """
 
     def has_object_permission(self, request, view, obj):
         return request.user == obj.user
 
 
+class IsTrainerOfTrainingDay(BasePermission):
+    """
+    Разрешает доступ только тренеру обьекта.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        return request.user == obj.trainer
+
+
 class IsChildOfParent(BasePermission):
     """
-    Разрешает доступ только ребенку владельца профиля.
+    Разрешает доступ только ребенку владельца обьекта родители.
     """
 
     def has_object_permission(self, request, view, obj):
