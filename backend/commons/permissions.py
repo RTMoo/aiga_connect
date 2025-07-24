@@ -69,3 +69,15 @@ class IsChild(BasePermission):
             request.user.is_authenticated
             and request.user.role == User.RoleChoices.CHILD
         )
+
+
+class IsParent(BasePermission):
+    """
+    Разрешает доступ только родителю.
+    """
+
+    def has_permission(self, request, view):
+        return (
+            request.user.is_authenticated
+            and request.user.role == User.RoleChoices.PARENT
+        )

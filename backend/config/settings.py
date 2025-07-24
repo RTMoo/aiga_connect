@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "profiles",
     "schedules",
     "commons",
+    "trainer_requests",
     "corsheaders",
     "channels",
 ]
