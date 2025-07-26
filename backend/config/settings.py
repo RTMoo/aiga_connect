@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "schedules",
     "commons",
     "trainer_requests",
+    "grades",
     "corsheaders",
     "channels",
 ]

@@ -3,134 +3,147 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
-from commons.permissions import IsTrainer, IsTrainerOfTrainingDay
+from commons.permissions import IsTrainer
 from schedules.serializers import (
-    TrainingDaySerializer,
-    IndividualTrainingSerializer,
-    CancelIndividualTrainingSerializer,
+    GroupTrainingSessionSerializer,
+    IndividualTrainingSessionSerializer,
+    TrainingSessionStatusSerializer,
 )
-from schedules.services import (
-    create_training_day,
-    edit_training_day,
-    create_individual_training_day,
-    edit_individual_training_day,
-    cancel_individual_training_day,
-)
-from schedules.selectors import get_training_day
+from schedules import services
 
 
-class CreateTrainingDayView(APIView):
+class CreateGroupTrainingSessionView(APIView):
     permission_classes = [IsAuthenticated, IsTrainer]
-    serializer_class = TrainingDaySerializer
+    serializer_class = GroupTrainingSessionSerializer
 
     def post(self, request: Request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        training_day = create_training_day(
+        group_training_session = services.create_group_training_session(
             trainer=request.user, data=serializer.validated_data
         )
 
-        data = self.serializer_class(instance=training_day).data
+        data = self.serializer_class(instance=group_training_session).data
 
         return Response(data=data, status=status.HTTP_201_CREATED)
 
 
-class EditTrainingDayView(APIView):
-    permission_classes = [IsAuthenticated, IsTrainerOfTrainingDay]
-    serializer_class = TrainingDaySerializer
+class EditGroupTrainingSessionView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = IndividualTrainingSessionSerializer
 
-    def patch(self, request: Request, training_day_id: int):
+    def patch(self, request: Request, training_session_id: int):
         serializer = self.serializer_class(data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
 
-        training_day = get_training_day(training_day_id)
-        self.check_object_permissions(request, training_day)
-
-        edited_training_day = edit_training_day(
-            training_day=training_day, data=serializer.validated_data
+        edited_group_training_session = services.edit_group_training_session(
+            training_session=training_session_id,
+            data=serializer.validated_data,
         )
 
-        data = self.serializer_class(instance=edited_training_day).data
+        data = self.serializer_class(instance=edited_group_training_session).data
 
         return Response(data=data, status=status.HTTP_200_OK)
 
 
-class DeleteTrainingDayView(APIView):
-    permission_classes = [IsAuthenticated, IsTrainerOfTrainingDay]
-
-    def delete(self, request: Request, training_day_id: int):
-        training_day = get_training_day(training_day_id)
-        self.check_object_permissions(request, training_day)
-
-        training_day.delete()
-
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class CreateIndividualTrainingDayView(APIView):
+class CancelGroupTrainingSessionView(APIView):
     permission_classes = [IsAuthenticated, IsTrainer]
-    serializer_class = IndividualTrainingSerializer
+    serializer_class = TrainingSessionStatusSerializer
+
+    def post(self, request: Request, training_session_id: int):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        services.cancel_group_training_session(
+            trainer=request.user,
+            training_session_id=training_session_id,
+            data=serializer.validated_data,
+        )
+
+        return Response(status=status.HTTP_200_OK)
+
+
+class CreateIndividualTrainingSessionView(APIView):
+    permission_classes = [IsAuthenticated, IsTrainer]
+    serializer_class = IndividualTrainingSessionSerializer
 
     def post(self, request: Request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        training_day = create_individual_training_day(
+        training_session = services.create_individual_training_session(
             trainer=request.user, data=serializer.validated_data
         )
 
-        data = self.serializer_class(instance=training_day).data
+        data = self.serializer_class(instance=training_session).data
 
         return Response(data=data, status=status.HTTP_201_CREATED)
 
 
-class EditIndividualTrainingDayView(APIView):
-    permission_classes = [IsAuthenticated, IsTrainerOfTrainingDay]
-    serializer_class = IndividualTrainingSerializer
+class EditIndividualTrainingSessionView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = IndividualTrainingSessionSerializer
 
-    def patch(self, request: Request, training_day_id: int):
+    def patch(self, request: Request, training_session_id: int):
         serializer = self.serializer_class(data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
 
-        training_day = get_training_day(training_day_id)
-        self.check_object_permissions(request, training_day)
-
-        edited_training_day = edit_individual_training_day(
-            training_day=training_day, data=serializer.validated_data
+        edited_training_session = services.edit_individual_training_session(
+            training_session_id=training_session_id, data=serializer.validated_data
         )
 
-        data = self.serializer_class(instance=edited_training_day).data
+        data = self.serializer_class(instance=edited_training_session).data
 
         return Response(data=data, status=status.HTTP_200_OK)
 
 
-class DeleteIndividualTrainingDayView(APIView):
-    permission_classes = [IsAuthenticated, IsTrainerOfTrainingDay]
+class CancelIndividualTrainingSessionView(APIView):
+    permission_classes = [IsAuthenticated, IsTrainer]
+    serializer_class = TrainingSessionStatusSerializer
 
-    def delete(self, request: Request, training_day_id: int):
-        training_day = get_training_day(training_day_id)
-        self.check_object_permissions(request, training_day)
-
-        training_day.delete()
-
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class CancelIndividualTrainingDayView(APIView):
-    permission_classes = [IsAuthenticated, IsTrainerOfTrainingDay]
-    serializer_class = CancelIndividualTrainingSerializer
-
-    def post(self, request: Request, training_day_id: int):
-        training_day = get_training_day(training_day_id)
-        self.check_object_permissions(request, training_day)
-
+    def post(self, request: Request, training_session_id: int):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        training_day = cancel_individual_training_day(
-            training_day=training_day, data=serializer.validated_data
+        services.cancel_individual_training_session(
+            trainer=request.user,
+            training_session_id=training_session_id,
+            data=serializer.validated_data,
         )
-        data = self.serializer_class(instance=training_day).data
 
-        return Response(data=data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
+
+
+class FinishIndividualTrainingSessionView(APIView):
+    permission_classes = [IsAuthenticated, IsTrainer]
+    serializer_class = TrainingSessionStatusSerializer
+
+    def post(self, request: Request, training_session_id: int):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        services.finish_individual_training_session(
+            trainer=request.user,
+            training_session_id=training_session_id,
+            data=serializer.validated_data,
+        )
+
+        return Response(status=status.HTTP_200_OK)
+
+
+class FinishGroupTrainingSessionView(APIView):
+    permission_classes = [IsAuthenticated, IsTrainer]
+    serializer_class = TrainingSessionStatusSerializer
+
+    def post(self, request: Request, training_session_id: int):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        services.finish_group_training_session(
+            trainer=request.user,
+            training_session_id=training_session_id,
+            data=serializer.validated_data,
+        )
+
+        return Response(status=status.HTTP_200_OK)

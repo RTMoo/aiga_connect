@@ -1,11 +1,11 @@
 from rest_framework import serializers
-from schedules.models import TrainingDay
 
 
-class BaseTrainingDaySerializer(serializers.Serializer):
+class BaseTrainingSessionSerializer(serializers.Serializer):
     trainer = serializers.CharField(source="trainer.username", read_only=True)
     discipline = serializers.CharField(source="discipline.slug", read_only=True)
     discipline_id = serializers.IntegerField(write_only=True)
+    date = serializers.DateField()
     start_time = serializers.TimeField(
         format="%H:%M",
         input_formats=["%H:%M"],
@@ -15,19 +15,18 @@ class BaseTrainingDaySerializer(serializers.Serializer):
         input_formats=["%H:%M"],
     )
     created_at = serializers.DateTimeField(read_only=True)
+    canceled = serializers.BooleanField(read_only=True)
 
 
-class TrainingDaySerializer(BaseTrainingDaySerializer):
-    day_of_week = serializers.ChoiceField(choices=TrainingDay.DaysOfWeek.choices)
+class GroupTrainingSessionSerializer(BaseTrainingSessionSerializer):
+    pass
 
 
-class IndividualTrainingSerializer(BaseTrainingDaySerializer):
+class IndividualTrainingSessionSerializer(BaseTrainingSessionSerializer):
     child = serializers.CharField(source="child.username", read_only=True)
     child_username = serializers.CharField(write_only=True)
-    training_date = serializers.DateField()
-    canceled = serializers.BooleanField(read_only=True)
     notes = serializers.CharField(required=False, allow_blank=True)
 
 
-class CancelIndividualTrainingSerializer(serializers.Serializer):
+class TrainingSessionStatusSerializer(serializers.Serializer):
     notes = serializers.CharField(required=False, allow_blank=True)

@@ -1,7 +1,12 @@
 from django.db import models
 
 
-class BaseTrainingDay(models.Model):
+class BaseTrainingSession(models.Model):
+    class StatusChoices(models.TextChoices):
+        SCHEDULED = "scheduled", "Запланировано"
+        FINISHED = "finished", "Закончено"
+        CANCELED = "canceled", "Отменено"
+
     trainer = models.ForeignKey("accounts.User", on_delete=models.CASCADE)
     start_time = models.TimeField()
     end_time = models.TimeField()
@@ -9,40 +14,31 @@ class BaseTrainingDay(models.Model):
         "commons.Discipline", on_delete=models.SET_NULL, null=True, blank=True
     )
     created_at = models.DateTimeField(auto_now_add=True)
+    date = models.DateField()
+    status = models.CharField(choices=StatusChoices.choices)
 
     class Meta:
         abstract = True
 
 
-class TrainingDay(BaseTrainingDay):
-    class DaysOfWeek(models.IntegerChoices):
-        MONDAY = 1, "Понедельник"
-        TUESDAY = 2, "Вторник"
-        WEDNESDAY = 3, "Среда"
-        THURSDAY = 4, "Четверг"
-        FRIDAY = 5, "Пятница"
-        SATURDAY = 6, "Суббота"
-        SUNDAY = 7, "Воскресенье"
-
-    day_of_week = models.IntegerField(choices=DaysOfWeek.choices)
-
+class GroupTrainingSession(BaseTrainingSession):
     class Meta:
-        unique_together = ("trainer", "day_of_week")
+        unique_together = ("trainer", "date")
 
     def __str__(self):
-        return f"{self.trainer.username} - {self.day_of_week} {self.start_time}-{self.end_time}"
+        return (
+            f"{self.trainer.username} — {self.date} {self.start_time}-{self.end_time}"
+        )
 
 
-class IndividualTraining(BaseTrainingDay):
+class IndividualTrainingSession(BaseTrainingSession):
     to_child = models.ForeignKey(
-        "accounts.User", on_delete=models.CASCADE, related_name="trainings"
+        "accounts.User", on_delete=models.CASCADE, related_name="individual_trainings"
     )
-    date = models.DateField()
-    canceled = models.BooleanField(default=False)
     notes = models.TextField(blank=True)
 
     class Meta:
         unique_together = ("trainer", "to_child", "date")
 
     def __str__(self):
-        return f"{self.trainer.username} — {self.date} ({self.start_time}-{self.end_time}) для {self.child.username}"
+        return f"{self.trainer.username} — {self.date} ({self.start_time}-{self.end_time}) для {self.to_child.username}"

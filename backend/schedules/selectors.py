@@ -1,11 +1,26 @@
-from schedules.models import TrainingDay
+from schedules.models import GroupTrainingSession, IndividualTrainingSession
 from rest_framework.exceptions import NotFound
 
 
-def get_training_day(training_day_id: int) -> TrainingDay:
-    training_day = TrainingDay.objects.filter(id=training_day_id).first()
+def get_group_training_session(training_session_id: int) -> GroupTrainingSession:
+    training_session = GroupTrainingSession.objects.filter(
+        id=training_session_id
+    ).first()
 
-    if not training_day:
+    if not training_session:
         raise NotFound(detail="Тренировка не найдена")
 
-    return training_day
+    return training_session
+
+
+def get_individual_training_session(
+    training_session_id: int,
+) -> IndividualTrainingSession:
+    training_session = IndividualTrainingSession.objects.filter(
+        id=training_session_id
+    ).first()
+
+    if not training_session:
+        raise NotFound(detail="Тренировка не найдена")
+
+    return training_session

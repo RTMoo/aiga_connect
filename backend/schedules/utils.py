@@ -1,6 +1,9 @@
-from typing import Any
+from typing import Any, Union, Type
 from commons.selectors import get_discipline
 from accounts.selectors import get_user
+from accounts.models import User
+from schedules.models import GroupTrainingSession, IndividualTrainingSession
+from rest_framework.exceptions import PermissionDenied, ValidationError
 
 
 def pop_and_resolve_fields(data: dict[str, Any]) -> dict[str, Any]:
@@ -23,3 +26,22 @@ def update_model_instance(instance: Any, data: dict[str, Any]):
         setattr(instance, key, value)
     instance.save()
     return instance
+
+
+def change_training_session_status(
+    trainer: User,
+    session: Union[GroupTrainingSession, IndividualTrainingSession],
+    expected_model: Type,
+    new_status: str,
+) -> None:
+    if not isinstance(session, expected_model):
+        raise ValidationError("Неверный тип тренировочной сессии.")
+
+    if session.trainer != trainer:
+        raise PermissionDenied("Вы не можете управлять этой сессией.")
+
+    if session.status != expected_model.StatusChoices.SCHEDULED:
+        raise ValidationError("Сессию нельзя завершить или отменить повторно.")
+
+    session.status = new_status
+    session.save()

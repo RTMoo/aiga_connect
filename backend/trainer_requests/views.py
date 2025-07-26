@@ -46,7 +46,7 @@ class RejectTrainerRequestView(APIView):
 class CancelTrainerRequestView(APIView):
     permission_classes = [IsAuthenticated, IsParent]
 
-    def delete(self, request: Request, request_id):
+    def post(self, request: Request, request_id):
         services.cancel_trainer_request(request_id=request_id, parent=request.user)
 
         return Response(status=status.HTTP_200_OK)

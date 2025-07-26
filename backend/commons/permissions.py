@@ -36,15 +36,6 @@ class IsOwner(BasePermission):
         return request.user == obj.user
 
 
-class IsTrainerOfTrainingDay(BasePermission):
-    """
-    Разрешает доступ только тренеру обьекта.
-    """
-
-    def has_object_permission(self, request, view, obj):
-        return request.user == obj.trainer
-
-
 class IsChildOfParent(BasePermission):
     """
     Разрешает доступ только ребенку владельца обьекта родители.
