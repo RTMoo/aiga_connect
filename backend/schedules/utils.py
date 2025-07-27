@@ -45,3 +45,10 @@ def change_training_session_status(
 
     session.status = new_status
     session.save()
+
+
+def check_training_session_finished(
+    session: Union[GroupTrainingSession, IndividualTrainingSession],
+):
+    if session.status != session.StatusChoices.FINISHED:
+        raise ValidationError("Сессия не завершена.")
