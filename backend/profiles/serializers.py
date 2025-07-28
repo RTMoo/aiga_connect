@@ -33,7 +33,7 @@ class ParentProfileSerializer(BaseProfileSerializer):
     address = serializers.CharField(max_length=255, required=False, allow_blank=True)
 
 
-class ChildProfileSerializer(BaseProfileSerializer):
+class AthleteProfileSerializer(BaseProfileSerializer):
     height_cm = serializers.IntegerField(required=False, allow_null=True)
     weight_kg = serializers.IntegerField(required=False, allow_null=True)
     belt_grade = serializers.CharField(
@@ -43,3 +43,7 @@ class ChildProfileSerializer(BaseProfileSerializer):
     disciplines_ids = serializers.ListField(
         child=serializers.IntegerField(), write_only=True, required=False
     )
+
+
+class ChildProfileSerializer(AthleteProfileSerializer):
+    parent = serializers.CharField(source="parent.username")

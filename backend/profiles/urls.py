@@ -24,7 +24,7 @@ urlpatterns = [
         name="get_children_profile",
     ),
     path(
-        route="parent/my-profile-edit/",
+        route="parent/edit-my-profile/",
         view=views.EditParentProfileView.as_view(),
         name="edit_parent_profile",
     ),
@@ -34,8 +34,18 @@ urlpatterns = [
         name="get_trainer_profile",
     ),
     path(
-        route="trainer/my-profile-edit/",
+        route="trainer/edit-my-profile/",
         view=views.EditTrainerProfileView.as_view(),
+        name="edit_trainer_profile",
+    ),
+    path(
+        route="athlete/<str:username>/",
+        view=views.GetAthleteProfileView.as_view(),
+        name="get_trainer_profile",
+    ),
+    path(
+        route="athlete/edit-my-profile/",
+        view=views.EditAthleteProfileView.as_view(),
         name="edit_trainer_profile",
     ),
 ]

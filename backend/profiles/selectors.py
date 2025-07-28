@@ -1,4 +1,5 @@
-from profiles.models import ChildProfile, ParentProfile, TrainerProfile
+from typing import Union
+from profiles.models import ChildProfile, ParentProfile, TrainerProfile, AthleteProfile
 from rest_framework.exceptions import NotFound
 from accounts.models import User
 
@@ -6,12 +7,13 @@ MODEL = {
     User.RoleChoices.PARENT: ParentProfile,
     User.RoleChoices.CHILD: ChildProfile,
     User.RoleChoices.TRAINER: TrainerProfile,
+    User.RoleChoices.ATHLETE: AthleteProfile,
 }
 
 
 def get_profile(
     username: str, role: User.RoleChoices
-) -> ChildProfile | ParentProfile | TrainerProfile:
+) -> Union[ChildProfile, ParentProfile, TrainerProfile]:
     profile = (
         MODEL[role]
         .objects.filter(user__username=username)

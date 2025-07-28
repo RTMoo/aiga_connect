@@ -56,3 +56,13 @@ class ChildProfile(BaseProfile):
     def clean(self):
         if self.parent.role != User.RoleChoices.PARENT:
             raise ValidationError("Родитель должен иметь роль 'parent'")
+
+
+class AthleteProfile(BaseProfile):
+    height_cm = models.PositiveIntegerField(null=True, blank=True)
+    weight_kg = models.PositiveIntegerField(null=True, blank=True)
+    belt_grade = models.CharField(max_length=50, null=True, blank=True)
+    disciplines = models.ManyToManyField("commons.Discipline", blank=True)
+
+    def __str__(self):
+        return f"Атлет id:{self.pk} {self.get_full_name()}"

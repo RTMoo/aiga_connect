@@ -18,6 +18,7 @@ class UserManager(BaseUserManager):
     def create_superuser(self, email, username=None, password=None, **extra_fields):
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("email_verified", True)
 
         return self.create_user(email, username, password, **extra_fields)
 
@@ -30,6 +31,7 @@ class User(AbstractUser):
         PARENT = "parent", "Родитель"
         CHILD = "child", "Ребенок"
         TRAINER = "trainer", "Тренер"
+        ATHLETE = "athlete", "спортсмен"
 
     email = models.EmailField(unique=True)
     email_verified = models.BooleanField(default=False)

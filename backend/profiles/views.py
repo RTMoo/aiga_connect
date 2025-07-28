@@ -13,6 +13,7 @@ from profiles.serializers import (
     ChildProfileSerializer,
     TrainerProfileSerializer,
     ParentProfileSerializer,
+    AthleteProfileSerializer,
 )
 from profiles.selectors import get_profile
 from profiles.services import edit_profile
@@ -23,6 +24,7 @@ SERIALIZERS = {
     User.RoleChoices.PARENT: ParentProfileSerializer,
     User.RoleChoices.TRAINER: TrainerProfileSerializer,
     User.RoleChoices.CHILD: ChildProfileSerializer,
+    User.RoleChoices.ATHLETE: AthleteProfileSerializer,
 }
 
 
@@ -126,9 +128,37 @@ class GetTrainerProfileView(APIView):
     serializer_class = TrainerProfileSerializer
 
     def get(self, request: Request, username: str):
-        parent = get_profile(username=username, role=User.RoleChoices.TRAINER)
-        self.check_object_permissions(request, parent)
+        trainer = get_profile(username=username, role=User.RoleChoices.TRAINER)
+        data = self.serializer_class(instance=trainer).data
 
-        data = self.serializer_class(instance=parent).data
+        return Response(data=data, status=status.HTTP_200_OK)
+
+
+class GetAthleteProfileView(APIView):
+    permission_classes = [IsOwner | IsTrainer]
+    serializer_class = AthleteProfileSerializer
+    
+    def get(self, request: Request, username: str):
+        athlete = get_profile(username=username, role=User.RoleChoices.ATHLETE)
+        data = self.serializer_class(instance=athlete).data
+
+        return Response(data=data, status=status.HTTP_200_OK)
+
+
+class EditAthleteProfileView(APIView):
+    permission_classes = [IsAuthenticated, IsOwner]
+    serializer_class = TrainerProfileSerializer
+
+    def patch(self, request: Request):
+        serializer = self.serializer_class(data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        profile = get_profile(
+            username=request.user.username, role=User.RoleChoices.ATHLETE
+        )
+        self.check_object_permissions(request, profile)
+
+        edited_profile = edit_profile(profile=profile, data=serializer.validated_data)
+
+        data = self.serializer_class(instance=edited_profile).data
 
         return Response(data=data, status=status.HTTP_200_OK)
