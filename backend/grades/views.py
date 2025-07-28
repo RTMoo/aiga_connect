@@ -7,7 +7,6 @@ from rest_framework.permissions import IsAuthenticated
 from grades.serializers import GradeSerializer
 from grades import services
 from grades import selectors
-from commons.permissions import IsChild, IsParent
 
 
 class GradingGroupAthleteView(APIView):
@@ -49,7 +48,7 @@ class GradingIndividualAthleteView(APIView):
 
 
 class GetAthleteGroupSessionGrades(APIView):
-    permission_classes = [IsAuthenticated, IsChild | IsParent]
+    permission_classes = [IsAuthenticated, IsTrainer]
     serializer_class = GradeSerializer
 
     def get(self, request: Request, username: str):
@@ -62,7 +61,7 @@ class GetAthleteGroupSessionGrades(APIView):
 
 
 class GetAthleteIndividualSessionAllGrades(APIView):
-    permission_classes = [IsAuthenticated, IsChild | IsParent]
+    permission_classes = [IsAuthenticated]
     serializer_class = GradeSerializer
 
     def get(self, request: Request, username: str):
@@ -75,7 +74,7 @@ class GetAthleteIndividualSessionAllGrades(APIView):
 
 
 class GetTrainerGroupSessionAllGrades(APIView):
-    permission_classes = [IsAuthenticated, IsTrainer]
+    permission_classes = [IsAuthenticated]
     serializer_class = GradeSerializer
 
     def get(self, request: Request, training_session_id: int):
