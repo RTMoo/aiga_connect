@@ -72,3 +72,15 @@ class IsParent(BasePermission):
             request.user.is_authenticated
             and request.user.role == User.RoleChoices.PARENT
         )
+
+
+class IsAthlete(BasePermission):
+    """
+    Разрешает доступ только спортсмену.
+    """
+
+    def has_permission(self, request, view):
+        return (
+            request.user.is_authenticated
+            and request.user.role == User.RoleChoices.ATHLETE
+        )

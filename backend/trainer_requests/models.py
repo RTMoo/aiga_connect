@@ -11,6 +11,8 @@ class TrainerRequest(models.Model):
         "accounts.User",
         on_delete=models.CASCADE,
         related_name="trainer_requests",
+        null=True,
+        blank=True,
     )
     athlete = models.ForeignKey(
         "accounts.User",

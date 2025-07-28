@@ -137,7 +137,7 @@ class GetTrainerProfileView(APIView):
 class GetAthleteProfileView(APIView):
     permission_classes = [IsOwner | IsTrainer]
     serializer_class = AthleteProfileSerializer
-    
+
     def get(self, request: Request, username: str):
         athlete = get_profile(username=username, role=User.RoleChoices.ATHLETE)
         data = self.serializer_class(instance=athlete).data

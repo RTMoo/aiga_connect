@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from accounts.models import User
-from profiles.models import TrainerProfile, ParentProfile, ChildProfile
+from profiles.models import TrainerProfile, ParentProfile, ChildProfile, AthleteProfile
 from django.utils import timezone
 from django.db.utils import IntegrityError
 
@@ -67,4 +67,23 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS("✅ Ребёнок создан."))
         except IntegrityError:
             self.stdout.write(self.style.SUCCESS("✅ Ребёнок уже создан."))
+
+        try:
+            # Создание атлета
+            athlete_user = User.objects.create_user(
+                username="athlete1",
+                email="athlete1@example.com",
+                password="password123",
+                role=User.RoleChoices.ATHLETE,
+                email_verified=True,
+            )
+            AthleteProfile.objects.create(
+                user=athlete_user,
+                first_name="атлет",
+                last_name="атлетович",
+            )
+            self.stdout.write(self.style.SUCCESS("✅ Атлет создан."))
+        except IntegrityError:
+            self.stdout.write(self.style.SUCCESS("✅ Атлет уже создан."))
+
         self.stdout.write(self.style.SUCCESS("🎉 Все пользователи успешно созданы."))

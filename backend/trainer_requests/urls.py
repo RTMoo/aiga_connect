@@ -4,7 +4,7 @@ from trainer_requests import views
 
 urlpatterns = [
     path(
-        route="create/",
+        route="<str:trainer_username>/send/",
         view=views.CreateTrainerRequestView.as_view(),
         name="create_trainer_request",
     ),

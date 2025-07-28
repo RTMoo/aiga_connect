@@ -6,11 +6,11 @@ from rest_framework.permissions import IsAuthenticated
 from trainer_requests.serializers import TrainerRequestSerializer
 from trainer_requests import services
 from trainer_requests import selectors
-from commons.permissions import IsParent, IsTrainer
+from commons.permissions import IsParent, IsTrainer, IsAthlete
 
 
 class CreateTrainerRequestView(APIView):
-    permission_classes = [IsAuthenticated, IsParent]
+    permission_classes = [IsAuthenticated, IsParent, IsAthlete]
     serializer_class = TrainerRequestSerializer
 
     def post(self, request: Request):
@@ -18,7 +18,7 @@ class CreateTrainerRequestView(APIView):
         serializer.is_valid(raise_exception=True)
 
         request = services.create_trainer_request(
-            parent=request.user, data=serializer.validated_data
+            sender=request.user, data=serializer.validated_data
         )
 
         data = self.serializer_class(instance=request).data

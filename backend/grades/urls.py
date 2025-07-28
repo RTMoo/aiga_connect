@@ -13,7 +13,6 @@ urlpatterns = [
         view=views.GetAthleteGroupSessionGrades.as_view(),
         name="get_athlete_group_session_grades",
     ),
-    
     path(
         route="create/individual/<int:training_session_id>/",
         view=views.GradingIndividualAthleteView.as_view(),
