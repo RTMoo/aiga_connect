@@ -10,10 +10,10 @@ from trainer_requests.selectors import get_trainer_request
 
 
 def create_trainer_request(parent: User, data: dict[str, Any]) -> TrainerRequest:
-    child = get_user(data["child_username"])
+    athlete = get_user(data["athlete_username"])
     trainer = get_user(data["trainer_username"])
 
-    if not ChildProfile.objects.filter(user=child, parent=parent).exists():
+    if not ChildProfile.objects.filter(user=athlete, parent=parent).exists():
         raise PermissionDenied("Ребёнок не принадлежит родителю")
 
     if trainer.role != User.RoleChoices.TRAINER:
@@ -22,7 +22,7 @@ def create_trainer_request(parent: User, data: dict[str, Any]) -> TrainerRequest
     try:
         return TrainerRequest.objects.create(
             parent=parent,
-            child=child,
+            athlete=athlete,
             trainer=trainer,
             notes=data["notes"],
         )

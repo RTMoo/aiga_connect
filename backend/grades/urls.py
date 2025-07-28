@@ -4,14 +4,24 @@ from grades import views
 
 urlpatterns = [
     path(
+        route="athlete/individual/all/",
+        view=views.GetAthleteIndividualSessionAllGrades.as_view(),
+        name="get_athlete_individual_session_grades",
+    ),
+    path(
+        route="athlete/group/all/",
+        view=views.GetAthleteGroupSessionGrades.as_view(),
+        name="get_athlete_group_session_grades",
+    ),
+    path(
         route="create/individual/<int:training_session_id>/",
-        view=views.GradingIndividualChildView.as_view(),
-        name="grading_individual_child",
+        view=views.GradingIndividualAthleteView.as_view(),
+        name="grading_individual_athlete",
     ),
     path(
         route="create/group/<int:training_session_id>/",
-        view=views.GradingGroupChildView.as_view(),
-        name="grading_group_child",
+        view=views.GradingGroupAthleteView.as_view(),
+        name="grading_group_athlete",
     ),
     path(
         route="trainer/individual/<int:training_session_id>/",
@@ -22,15 +32,5 @@ urlpatterns = [
         route="trainer/group/<int:training_session_id>/",
         view=views.GetTrainerGroupSessionAllGrades.as_view(),
         name="get_trainer_group_session_grades",
-    ),
-    path(
-        route="child/individual/all/",
-        view=views.GetChildIndividualSessionAllGrades.as_view(),
-        name="get_child_individual_session_grades",
-    ),
-    path(
-        route="child/group/all/",
-        view=views.GetChildGroupSessionGrades.as_view(),
-        name="get_child_group_session_grades",
     ),
 ]

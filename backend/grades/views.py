@@ -10,7 +10,7 @@ from grades import selectors
 from commons.permissions import IsChild, IsParent
 
 
-class GradingGroupChildView(APIView):
+class GradingGroupAthleteView(APIView):
     permission_classes = [IsAuthenticated, IsTrainer]
     serializer_class = GradeSerializer
 
@@ -18,7 +18,7 @@ class GradingGroupChildView(APIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        grade = services.grading_group_child(
+        grade = services.grading_group_athlete(
             trainer=request.user,
             training_session_id=training_session_id,
             data=serializer.validated_data,
@@ -29,7 +29,7 @@ class GradingGroupChildView(APIView):
         return Response(data=data, status=status.HTTP_201_CREATED)
 
 
-class GradingIndividualChildView(APIView):
+class GradingIndividualAthleteView(APIView):
     permission_classes = [IsAuthenticated, IsTrainer]
     serializer_class = GradeSerializer
 
@@ -37,7 +37,7 @@ class GradingIndividualChildView(APIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        grade = services.grading_individual_child(
+        grade = services.grading_individual_athlete(
             trainer=request.user,
             training_session_id=training_session_id,
             data=serializer.validated_data,
@@ -48,12 +48,12 @@ class GradingIndividualChildView(APIView):
         return Response(data=data, status=status.HTTP_201_CREATED)
 
 
-class GetChildGroupSessionGrades(APIView):
+class GetAthleteGroupSessionGrades(APIView):
     permission_classes = [IsAuthenticated, IsChild | IsParent]
     serializer_class = GradeSerializer
 
     def get(self, request: Request, username: str):
-        grades = selectors.get_child_group_grades(
+        grades = selectors.get_athlete_group_grades(
             username=username, sender=request.user
         )
         data = self.serializer_class(instance=grades, many=True).data
@@ -61,12 +61,12 @@ class GetChildGroupSessionGrades(APIView):
         return Response(data=data, status=status.HTTP_200_OK)
 
 
-class GetChildIndividualSessionAllGrades(APIView):
+class GetAthleteIndividualSessionAllGrades(APIView):
     permission_classes = [IsAuthenticated, IsChild | IsParent]
     serializer_class = GradeSerializer
 
     def get(self, request: Request, username: str):
-        grades = selectors.get_child_individual_grades(
+        grades = selectors.get_athlete_individual_grades(
             username=username, sender=request.user
         )
         data = self.serializer_class(instance=grades, many=True).data

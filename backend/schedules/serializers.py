@@ -23,8 +23,8 @@ class GroupTrainingSessionSerializer(BaseTrainingSessionSerializer):
 
 
 class IndividualTrainingSessionSerializer(BaseTrainingSessionSerializer):
-    child = serializers.CharField(source="child.username", read_only=True)
-    child_username = serializers.CharField(write_only=True)
+    athlete = serializers.CharField(source="to_athlete.username", read_only=True)
+    athlete_username = serializers.CharField(write_only=True)
     notes = serializers.CharField(required=False, allow_blank=True)
 
 

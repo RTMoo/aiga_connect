@@ -7,16 +7,16 @@ from rest_framework.exceptions import PermissionDenied, ValidationError
 
 
 def pop_and_resolve_fields(data: dict[str, Any]) -> dict[str, Any]:
-    """Преобразует поля discipline_id и to_child в объекты и подставляет в словарь."""
+    """Преобразует поля discipline_id и to_athlete в объекты и подставляет в словарь."""
     data = data.copy()
 
     if "discipline_id" in data:
         discipline_id = data.pop("discipline_id")
         data["discipline"] = get_discipline(discipline_id)
 
-    if "to_child" in data:
-        user_id = data.pop("to_child")
-        data["to_child"] = get_user(user_id)
+    if "to_athlete" in data:
+        user_id = data.pop("to_athlete")
+        data["to_athlete"] = get_user(user_id)
 
     return data
 
@@ -52,3 +52,10 @@ def check_training_session_finished(
 ):
     if session.status != session.StatusChoices.FINISHED:
         raise ValidationError("Сессия не завершена.")
+
+
+def check_training_session_scheduled(
+    session: Union[GroupTrainingSession, IndividualTrainingSession],
+):
+    if session.status != session.StatusChoices.SCHEDULED:
+        raise ValidationError("Сессия не запланирована.")

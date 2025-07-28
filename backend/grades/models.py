@@ -4,6 +4,11 @@ from django.core.exceptions import ValidationError
 
 
 class Grade(models.Model):
+    class StatusChoices(models.TextChoices):
+        VISITED = "visited", "Посещена"
+        NOT_VISITED = "not_visited", "Не посещена"
+        LATE = "late", "Опоздание"
+
     group_training_session = models.ForeignKey(
         "schedules.GroupTrainingSession",
         on_delete=models.CASCADE,
@@ -16,7 +21,7 @@ class Grade(models.Model):
         blank=True,
         null=True,
     )
-    child = models.ForeignKey(
+    athlete = models.ForeignKey(
         "accounts.User",
         on_delete=models.CASCADE,
         related_name="grades",
@@ -29,6 +34,11 @@ class Grade(models.Model):
     )
     notes = models.TextField(blank=True, max_length=512, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    attendance = models.CharField(
+        max_length=32,
+        choices=StatusChoices.choices,
+        default=StatusChoices.NOT_VISITED,
+    )
 
     def clean(self):
         if bool(self.group_training_session) == bool(self.individual_training_session):

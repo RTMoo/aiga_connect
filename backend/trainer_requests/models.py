@@ -12,10 +12,10 @@ class TrainerRequest(models.Model):
         on_delete=models.CASCADE,
         related_name="trainer_requests",
     )
-    child = models.ForeignKey(
+    athlete = models.ForeignKey(
         "accounts.User",
         on_delete=models.CASCADE,
-        related_name="trainer_requests_for_child",
+        related_name="trainer_requests_for_athlete",
     )
     trainer = models.ForeignKey(
         "accounts.User",
@@ -31,8 +31,10 @@ class TrainerRequest(models.Model):
     notes = models.TextField(blank=True, max_length=128, null=True)
 
     class Meta:
-        unique_together = ("child", "trainer")
+        unique_together = ("athlete", "trainer")
         ordering = ["-created_at"]
 
     def __str__(self):
-        return f"{self.parent} → {self.trainer} (child: {self.child}) [{self.status}]"
+        return (
+            f"{self.parent} → {self.trainer} (athlete: {self.athlete}) [{self.status}]"
+        )

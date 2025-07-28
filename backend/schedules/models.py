@@ -32,13 +32,13 @@ class GroupTrainingSession(BaseTrainingSession):
 
 
 class IndividualTrainingSession(BaseTrainingSession):
-    to_child = models.ForeignKey(
+    to_athlete = models.ForeignKey(
         "accounts.User", on_delete=models.CASCADE, related_name="individual_trainings"
     )
     notes = models.TextField(blank=True)
 
     class Meta:
-        unique_together = ("trainer", "to_child", "date")
+        unique_together = ("trainer", "to_athlete", "date")
 
     def __str__(self):
-        return f"{self.trainer.username} — {self.date} ({self.start_time}-{self.end_time}) для {self.to_child.username}"
+        return f"{self.trainer.username} — {self.date} ({self.start_time}-{self.end_time}) для {self.to_athlete.username}"

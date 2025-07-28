@@ -4,18 +4,20 @@ from accounts.selectors import get_user
 from grades.utils import check_child_parent_relationship
 
 
-def get_child_group_grades(username: str, sender: User):
-    child = get_user(username)
-    check_child_parent_relationship(child, sender)
+def get_athlete_group_grades(username: str, sender: User):
+    athlete = get_user(username)
+    check_child_parent_relationship(athlete, sender)
 
-    return Grade.objects.filter(child=child, group_training_session__isnull=False)
+    return Grade.objects.filter(athlete=athlete, group_training_session__isnull=False)
 
 
-def get_child_individual_grades(username: str, sender: User):
-    child = get_user(username)
-    check_child_parent_relationship(child, sender)
+def get_athlete_individual_grades(username: str, sender: User):
+    athlete = get_user(username)
+    check_child_parent_relationship(athlete, sender)
 
-    return Grade.objects.filter(child=child, individual_training_session__isnull=False)
+    return Grade.objects.filter(
+        athlete=athlete, individual_training_session__isnull=False
+    )
 
 
 def get_trainer_group_session_grades(training_session_id: int, trainer: User):

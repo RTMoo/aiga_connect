@@ -7,18 +7,18 @@ from schedules.selectors import (
     get_individual_training_session,
 )
 from schedules.utils import check_training_session_finished
-from trainer_requests.utils import check_trainer_child_relationship
+from trainer_requests.utils import check_trainer_athlete_relationship
 from grades.utils import check_individual_session_access
 
 
-def grading_group_child(
+def grading_group_athlete(
     trainer: User,
     training_session_id: int,
     data: dict[str, Any],
 ) -> Grade:
-    child = get_user(data.pop("child_username"))
+    athlete = get_user(data.pop("athlete_username"))
 
-    check_trainer_child_relationship(trainer, child)
+    check_trainer_athlete_relationship(trainer, athlete)
 
     training_session = get_group_training_session(training_session_id)
 
@@ -26,29 +26,29 @@ def grading_group_child(
 
     return Grade.objects.create(
         group_training_session=training_session,
-        child=child,
+        athlete=athlete,
         grade=data["grade"],
         notes=data["notes"],
     )
 
 
-def grading_individual_child(
+def grading_individual_athlete(
     trainer: User,
     training_session_id: int,
     data: dict[str, Any],
 ) -> Grade:
-    child = get_user(data.pop("child_username"))
+    athlete = get_user(data.pop("athlete_username"))
 
-    check_trainer_child_relationship(trainer, child)
+    check_trainer_athlete_relationship(trainer, athlete)
 
     training_session = get_individual_training_session(training_session_id)
 
-    check_individual_session_access(trainer, child, training_session)
+    check_individual_session_access(trainer, athlete, training_session)
     check_training_session_finished(training_session)
 
     return Grade.objects.create(
         individual_training_session=training_session,
-        child=child,
+        athlete=athlete,
         grade=data["grade"],
         notes=data["notes"],
     )
