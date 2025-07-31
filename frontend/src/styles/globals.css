@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+:root {
+  --background: #ffffff;
+  --foreground: #000000;
+  --primary: #030213;
+  --primary-foreground: #ffffff;
+  --secondary: #f3f4f6;
+  --secondary-foreground: #030213;
+  --muted: #ececf0;
+  --muted-foreground: #717182;
+  --accent: #e9ebef;
+  --accent-foreground: #030213;
+  --destructive: #d4183d;
+  --destructive-foreground: #ffffff;
+  --border: rgba(0, 0, 0, 0.1);
+  --input: transparent;
+  --ring: #030213;
+  --radius: 0.625rem;
+  
+  /* AIGA Connect Custom Variables */
+  --aiga-red: #B20000;
+  --aiga-dark: #121212;
+  --aiga-dark-card: #1E1E1E;
+  --aiga-gray: #333333;
+  --aiga-text-secondary: #B0B0B0;
+}
+
+.dark {
+  --background: var(--aiga-dark);
+  --foreground: #ffffff;
+  --primary: var(--aiga-red);
+  --primary-foreground: #ffffff;
+  --secondary: var(--aiga-gray);
+  --secondary-foreground: #ffffff;
+  --muted: var(--aiga-gray);
+  --muted-foreground: var(--aiga-text-secondary);
+  --accent: var(--aiga-gray);
+  --accent-foreground: #ffffff;
+  --destructive: var(--aiga-red);
+  --destructive-foreground: #ffffff;
+  --border: var(--aiga-gray);
+  --input: var(--aiga-gray);
+  --ring: var(--aiga-red);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md font-medium;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 px-4 py-2 rounded-md font-medium;
+  }
+}
