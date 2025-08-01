@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: backend
+    env: docker-compose
+    plan: free
+    buildCommand: docker-compose build
+    startCommand: docker-compose up backend
+    autoDeploy: true
+
+  - type: worker
+    name: celery
+    env: docker-compose
+    plan: free
+    buildCommand: docker-compose build
+    startCommand: docker-compose up celery
+    autoDeploy: true

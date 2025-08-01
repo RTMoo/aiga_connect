@@ -84,3 +84,15 @@ class IsAthlete(BasePermission):
             request.user.is_authenticated
             and request.user.role == User.RoleChoices.ATHLETE
         )
+
+
+class IsModerator(BasePermission):
+    """
+    Разрешает доступ только модератору.
+    """
+
+    def has_permission(self, request, view):
+        return (
+            request.user.is_authenticated
+            and request.user.role == User.RoleChoices.MODERATOR
+        )

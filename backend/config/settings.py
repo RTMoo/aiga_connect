@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     "trainer_requests",
     "grades",
     "reviews",
+    "shop",
+    "chats",
     "corsheaders",
     "channels",
 ]
