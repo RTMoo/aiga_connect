@@ -32,6 +32,7 @@ class User(AbstractUser):
         CHILD = "child", "Ребенок"
         TRAINER = "trainer", "Тренер"
         ATHLETE = "athlete", "спортсмен"
+        MODERATOR = "moderator", "Модератор"
 
     email = models.EmailField(unique=True)
     email_verified = models.BooleanField(default=False)

@@ -30,6 +30,7 @@ jsonschema-specifications==2025.4.1
 kombu==5.5.4
 msgpack==1.1.1
 packaging==25.0
+pillow==11.3.0
 prompt_toolkit==3.0.51
 pyasn1==0.6.1
 pyasn1_modules==0.4.2

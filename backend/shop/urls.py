@@ -1,0 +1,50 @@
+from django.urls import path
+from shop import views
+
+urlpatterns = [
+    path(
+        route="product/create/",
+        view=views.CreateProductView.as_view(),
+        name="create_product",
+    ),
+    path(
+        route="product/<int:product_id>/edit/",
+        view=views.EditProductView.as_view(),
+        name="edit_product",
+    ),
+    path(
+        route="product/<int:product_id>/delete/",
+        view=views.DeleteProductView.as_view(),
+        name="delete_product",
+    ),
+    path(
+        route="product/list/",
+        view=views.GetProductsListView.as_view(),
+        name="get_products_list",
+    ),
+    path(
+        route="product/<int:product_id>/",
+        view=views.GetProductDetailView.as_view(),
+        name="get_product_detail",
+    ),
+    path(
+        route="category/create/",
+        view=views.CreateCategoryView.as_view(),
+        name="create_category",
+    ),
+    path(
+        route="category/<int:category_id>/edit/",
+        view=views.EditCategoryView.as_view(),
+        name="edit_category",
+    ),
+    path(
+        route="category/<int:category_id>/delete/",
+        view=views.DeleteCategoryView.as_view(),
+        name="delete_category",
+    ),
+    path(
+        route="category/list/",
+        view=views.GetCategoriesListView.as_view(),
+        name="get_categories_list",
+    ),
+]
