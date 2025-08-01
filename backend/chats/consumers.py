@@ -2,14 +2,14 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from chats.models import Chat, Message
-from accounts.models import CustomUser
+from accounts.models import User
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.chat_id: int = self.scope["url_route"]["kwargs"]["chat_id"]
         self.room_group_name: str = f"chat_{self.chat_id}"
-        self.user: CustomUser = self.scope["user"]
+        self.user: User = self.scope["user"]
 
         if not self.user.is_authenticated:
             await self.close()
@@ -45,7 +45,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
     @database_sync_to_async
-    def create_message(self, chat_id: int, sender: CustomUser, text: str):
+    def create_message(self, chat_id: int, sender: User, text: str):
         chat = Chat.objects.filter(id=chat_id).first()
         message = Message.objects.create(chat=chat, author=sender, text=text)
 

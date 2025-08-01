@@ -1,10 +1,10 @@
 from chats.models import Chat, Message
-from accounts.models import CustomUser
+from accounts.models import User
 from accounts.selectors import get_user
 from commons.utils import sort_models
 
 
-def create_chat(user1: CustomUser, user2_username: str) -> Chat:
+def create_chat(user1: User, user2_username: str) -> Chat:
     user2 = get_user(username=user2_username)
 
     user1, user2 = sort_models([user1, user2])

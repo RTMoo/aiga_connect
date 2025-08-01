@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: django-web
+    env: docker
+    plan: free
+    buildCommand: docker-compose build
+    startCommand: docker-compose up web

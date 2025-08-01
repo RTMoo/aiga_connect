@@ -6,7 +6,7 @@ services:
     env_file:
       - backend/.env
     volumes:
-      - ./backend:/backend  # только этот volume нужен
+      - ./backend:/backend
     environment:
       - REDIS_HOST=redis
       - PYTHONUNBUFFERED=1
@@ -15,7 +15,9 @@ services:
     depends_on:
       - redis
     command: >
-      sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+      sh -c "python manage.py makemigrations &&
+             python manage.py migrate &&
+             daphne -b 0.0.0.0 -p 8000 config.asgi:application"
     networks:
       - app_net
 
@@ -32,7 +34,6 @@ services:
       - REDIS_HOST=redis
       - PYTHONUNBUFFERED=1
     depends_on:
-      - backend
       - redis
     networks:
       - app_net

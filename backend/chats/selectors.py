@@ -1,9 +1,9 @@
 from chats.models import Chat, Message
-from accounts.models import CustomUser
+from accounts.models import User
 from django.db.models import Q, Prefetch
 
 
-def get_user_chats(sender: CustomUser):
+def get_user_chats(sender: User):
     chats = (
         Chat.objects.filter(Q(user1=sender) | Q(user2=sender))
         .select_related("user1", "user2")

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "grades",
     "reviews",
     "shop",
+    "chats",
     "corsheaders",
     "channels",
 ]
