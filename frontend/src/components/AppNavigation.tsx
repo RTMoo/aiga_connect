@@ -26,6 +26,13 @@ export type Screen =
 interface AppNavigationProps {
   currentScreen: Screen;
   userRole: UserRole | "";
+  user?: {
+    id: number;
+    email: string;
+    username: string;
+    role: string;
+    email_verified: boolean;
+  } | null;
   onNavigate: (screen: Screen) => void;
   onLogin: (role: UserRole) => void;
   onLogout: () => void;
@@ -34,6 +41,7 @@ interface AppNavigationProps {
 export function AppNavigation({
   currentScreen,
   userRole,
+  user,
   onNavigate,
   onLogin,
   onLogout,
@@ -66,13 +74,14 @@ export function AppNavigation({
           />
         );
       case "home":
-        return <HomeScreen userRole={userRole} onNavigate={onNavigate} />;
+        return <HomeScreen userRole={userRole} user={user} onNavigate={onNavigate} />;
       case "schedule":
         return <ScheduleScreen userRole={userRole} onNavigate={onNavigate} />;
       case "profile":
         return (
           <ProfileScreen
             userRole={userRole}
+            user={user}
             onNavigate={onNavigate}
             onLogout={onLogout}
           />

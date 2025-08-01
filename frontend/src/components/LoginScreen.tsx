@@ -90,7 +90,7 @@ export function LoginScreen({ onLogin, onShowAuth }: LoginScreenProps) {
                     placeholder="Введите ваш email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10 bg-background/50 border-border/50 text-white placeholder:text-muted-foreground"
+                    className="pl-10 bg-background/50 border-border/50 text-black !text-black placeholder:text-muted-foreground"
                     required
                   />
                 </div>
@@ -108,7 +108,7 @@ export function LoginScreen({ onLogin, onShowAuth }: LoginScreenProps) {
                     placeholder="Введите пароль"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 pr-10 bg-background/50 border-border/50 text-white placeholder:text-muted-foreground"
+                    className="pl-10 pr-10 bg-background/50 border-border/50 text-black !text-black placeholder:text-muted-foreground"
                     required
                   />
                   <Button

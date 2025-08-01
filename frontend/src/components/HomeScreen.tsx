@@ -19,10 +19,17 @@ import { UserRole, Screen } from "./AppNavigation";
 
 interface HomeScreenProps {
   userRole: UserRole | "";
+  user?: {
+    id: number;
+    email: string;
+    username: string;
+    role: string;
+    email_verified: boolean;
+  } | null;
   onNavigate: (screen: Screen) => void;
 }
 
-export function HomeScreen({ userRole, onNavigate }: HomeScreenProps) {
+export function HomeScreen({ userRole, user, onNavigate }: HomeScreenProps) {
   const getPopularActions = () => {
     const baseActions = [
       {
@@ -79,13 +86,15 @@ export function HomeScreen({ userRole, onNavigate }: HomeScreenProps) {
   };
 
   const getRoleGreeting = () => {
+    const username = user?.username || "Пользователь";
+    
     switch (userRole) {
       case "parent":
-        return "Добро пожаловать, Елена";
+        return `Добро пожаловать, ${username}`;
       case "coach":
-        return "Добро пожаловать, тренер Аслан";
+        return `Добро пожаловать, тренер ${username}`;
       default:
-        return "Добро пожаловать, Амир";
+        return `Добро пожаловать, ${username}`;
     }
   };
 

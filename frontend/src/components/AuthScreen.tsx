@@ -284,7 +284,7 @@ export function AuthScreen({
                       placeholder="Введите имя пользователя"
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
-                      className={`pl-10 bg-background/50 border-border/50 text-black placeholder:text-muted-foreground ${
+                      className={`pl-10 bg-background/50 border-border/50 text-black !text-black placeholder:text-muted-foreground ${
                         errors.username ? "border-destructive" : ""
                       }`}
                       disabled={isLoading}
@@ -311,7 +311,7 @@ export function AuthScreen({
                     placeholder="Введите ваш email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className={`pl-10 bg-background/50 border-border/50 text-black placeholder:text-muted-foreground ${
+                    className={`pl-10 bg-background/50 border-border/50 text-black !text-black placeholder:text-muted-foreground ${
                       errors.email ? "border-destructive" : ""
                     }`}
                     disabled={isLoading}
@@ -336,7 +336,7 @@ export function AuthScreen({
                       placeholder="Введите пароль"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className={`pl-10 pr-10 bg-background/50 border-border/50 text-black placeholder:text-muted-foreground ${
+                      className={`pl-10 pr-10 bg-background/50 border-border/50 text-black !text-black placeholder:text-muted-foreground ${
                         errors.password ? "border-destructive" : ""
                       }`}
                       disabled={isLoading}
@@ -377,7 +377,7 @@ export function AuthScreen({
                       placeholder="Повторите пароль"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
-                      className={`pl-10 pr-10 bg-background/50 border-border/50 text-black placeholder:text-muted-foreground ${
+                      className={`pl-10 pr-10 bg-background/50 border-border/50 text-black !text-black placeholder:text-muted-foreground ${
                         errors.confirmPassword ? "border-destructive" : ""
                       }`}
                       disabled={isLoading}
@@ -419,7 +419,7 @@ export function AuthScreen({
                       placeholder="Введите код из email"
                       value={confirmCode}
                       onChange={(e) => setConfirmCode(e.target.value)}
-                      className="bg-background/50 border-border/50 text-black placeholder:text-muted-foreground text-center text-lg tracking-widest"
+                      className="bg-background/50 border-border/50 text-black !text-black placeholder:text-muted-foreground text-center text-lg tracking-widest"
                       maxLength={6}
                       disabled={isLoading}
                     />

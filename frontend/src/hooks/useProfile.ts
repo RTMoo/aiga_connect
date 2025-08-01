@@ -2,60 +2,94 @@ import { useState, useEffect } from 'react';
 import { apiClient } from '../api/client';
 
 interface Profile {
-  id: number;
-  user: {
-    id: number;
-    email: string;
-    username: string;
-    role: string;
-  };
-  // Добавьте другие поля профиля в зависимости от роли
+  username: string;
+  first_name: string;
+  last_name: string;
+  birth_date?: string;
+  phone?: string;
+  updated_at: string;
+  created_at: string;
   [key: string]: unknown;
 }
 
-export function useProfile(username?: string) {
+interface TrainerProfile extends Profile {
+  bio?: string;
+  training_zone_address: string;
+  monthly_price: number;
+  disciplines: Array<{
+    id: number;
+    name: string;
+    slug: string;
+  }>;
+}
+
+interface AthleteProfile extends Profile {
+  height_cm?: number;
+  weight_kg?: number;
+  belt_grade?: string;
+  disciplines: Array<{
+    id: number;
+    name: string;
+    slug: string;
+  }>;
+}
+
+interface ParentProfile extends Profile {
+  address?: string;
+}
+
+interface ChildProfile extends AthleteProfile {
+  parent: string;
+}
+
+export function useProfile() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchProfile = async (username: string, role: string) => {
+  const fetchProfile = async (role: string, username?: string) => {
     setIsLoading(true);
     setError(null);
-
+    
     try {
       let response;
+      
       switch (role) {
         case 'trainer':
-          response = await apiClient.getTrainerProfile(username);
+          response = await apiClient.getTrainerProfile(username || '');
           break;
         case 'athlete':
-          response = await apiClient.getAthleteProfile(username);
+          response = await apiClient.getAthleteProfile(username || '');
           break;
         case 'parent':
-          response = await apiClient.getParentProfile(username);
+          response = await apiClient.getParentProfile(username || '');
+          break;
+        case 'child':
+          response = await apiClient.getChildrenProfile(username || '');
           break;
         default:
-          response = await apiClient.getAthleteProfile(username);
+          throw new Error('Неизвестная роль пользователя');
       }
 
       if (response.data) {
         setProfile(response.data as Profile);
       } else {
-        setError(response.error || 'Профиль не найден');
+        setError(response.error || 'Не удалось загрузить профиль');
       }
     } catch (error) {
-      setError('Ошибка загрузки профиля');
+      setError('Ошибка сети');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const updateProfile = async (data: Record<string, unknown>, role: string) => {
+  const updateProfile = async (role: string, data: Record<string, unknown>) => {
     setIsLoading(true);
     setError(null);
-
+    
     try {
       let response;
+      
       switch (role) {
         case 'trainer':
           response = await apiClient.editTrainerProfile(data);
@@ -67,31 +101,25 @@ export function useProfile(username?: string) {
           response = await apiClient.editParentProfile(data);
           break;
         default:
-          response = await apiClient.editAthleteProfile(data);
+          throw new Error('Неизвестная роль пользователя');
       }
 
       if (response.data) {
         setProfile(response.data as Profile);
         return { success: true };
       } else {
-        setError(response.error || 'Ошибка обновления профиля');
-        return { success: false, error: response.error };
+        const errorMsg = response.error || 'Не удалось обновить профиль';
+        setError(errorMsg);
+        return { success: false, error: errorMsg };
       }
     } catch (error) {
-      setError('Ошибка сети');
-      return { success: false, error: 'Ошибка сети' };
+      const errorMsg = 'Ошибка сети';
+      setError(errorMsg);
+      return { success: false, error: errorMsg };
     } finally {
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (username) {
-      // Здесь нужно получить роль пользователя из контекста или параметров
-      // Пока используем athlete как дефолт
-      fetchProfile(username, 'athlete');
-    }
-  }, [username]);
 
   return {
     profile,

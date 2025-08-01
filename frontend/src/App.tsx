@@ -57,6 +57,7 @@ export default function App() {
         <AppNavigation
           currentScreen={currentScreen}
           userRole={mapApiRoleToFrontendRole(user.role)}
+          user={user}
           onNavigate={handleNavigate}
           onLogin={handleLogin}
           onLogout={handleLogout}
