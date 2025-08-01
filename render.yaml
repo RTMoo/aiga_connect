@@ -1,7 +1,16 @@
 services:
   - type: web
-    name: django-web
+    name: backend
     env: docker
     plan: free
     buildCommand: docker-compose build
-    startCommand: docker-compose up web
+    startCommand: docker-compose up backend
+    autoDeploy: true
+
+  - type: worker
+    name: celery
+    env: docker
+    plan: free
+    buildCommand: docker-compose build
+    startCommand: docker-compose up celery
+    autoDeploy: true
