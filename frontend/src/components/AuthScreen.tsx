@@ -126,12 +126,19 @@ export function AuthScreen({
         const result = await login(email, password);
         if (result.success) {
           onLogin("athlete"); // Роль будет получена из API
+        } else {
+          // Показываем ошибку от API
+          setErrors({ general: result.error || "Ошибка входа" });
         }
       } else {
         if (showConfirmCode) {
           const result = await confirmCodeApi(email, confirmCode);
           if (result.success) {
             onLogin(selectedRole);
+          } else {
+            setErrors({
+              confirmCode: result.error || "Ошибка подтверждения кода",
+            });
           }
         } else {
           const result = await register(
@@ -142,11 +149,14 @@ export function AuthScreen({
           );
           if (result.success) {
             setShowConfirmCode(true);
+          } else {
+            setErrors({ general: result.error || "Ошибка регистрации" });
           }
         }
       }
     } catch (error) {
       console.error("Auth error:", error);
+      setErrors({ general: "Ошибка сети" });
     } finally {
       setIsLoading(false);
     }
@@ -222,10 +232,12 @@ export function AuthScreen({
 
           <CardContent className="space-y-6">
             {/* Error Display */}
-            {error && (
+            {(error || errors.general) && (
               <div className="p-3 bg-destructive/20 border border-destructive/50 rounded-lg flex items-center space-x-2">
                 <AlertCircle className="w-4 h-4 text-destructive" />
-                <p className="text-destructive text-sm">{error}</p>
+                <p className="text-destructive text-sm">
+                  {error || errors.general}
+                </p>
               </div>
             )}
 

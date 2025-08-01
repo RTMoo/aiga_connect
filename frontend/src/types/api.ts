@@ -3,9 +3,34 @@ export interface User {
   id: number;
   email: string;
   username: string;
-  role: 'parent' | 'child' | 'trainer' | 'athlete';
+  role: 'parent' | 'child' | 'trainer' | 'athlete' | 'coach';
   email_verified: boolean;
   date_joined: string;
+}
+
+// Base Profile type
+export interface Profile {
+  user_id: number;
+  user_email: string;
+  username: string;
+  user_role: string;
+  user_email_verified: boolean;
+  first_name: string;
+  last_name: string;
+  birth_date?: string;
+  phone?: string;
+  updated_at: string;
+  created_at: string;
+  // Trainer specific fields
+  bio?: string;
+  training_zone_address?: string;
+  monthly_price?: number;
+  // Athlete specific fields
+  height_cm?: number;
+  weight_kg?: number;
+  belt_grade?: string;
+  // Parent specific fields
+  address?: string;
 }
 
 // Profile types
@@ -130,4 +155,28 @@ export interface UpdateProfileForm {
   achievements?: string[];
   phone_number?: string;
   address?: string;
+}
+
+export interface Chat {
+  chat_id: number;
+  second_user: string;
+  last_message?: {
+    text: string;
+    author: string | null;
+    created_at: string;
+  };
+  created_at: string;
+}
+
+export interface Message {
+  id: number;
+  chat_id: number;
+  text: string;
+  author: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CreateChatRequest {
+  to_user: string;
 } 

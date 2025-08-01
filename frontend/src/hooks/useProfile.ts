@@ -1,46 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { apiClient } from '../api/client';
-
-interface Profile {
-  username: string;
-  first_name: string;
-  last_name: string;
-  birth_date?: string;
-  phone?: string;
-  updated_at: string;
-  created_at: string;
-  [key: string]: unknown;
-}
-
-interface TrainerProfile extends Profile {
-  bio?: string;
-  training_zone_address: string;
-  monthly_price: number;
-  disciplines: Array<{
-    id: number;
-    name: string;
-    slug: string;
-  }>;
-}
-
-interface AthleteProfile extends Profile {
-  height_cm?: number;
-  weight_kg?: number;
-  belt_grade?: string;
-  disciplines: Array<{
-    id: number;
-    name: string;
-    slug: string;
-  }>;
-}
-
-interface ParentProfile extends Profile {
-  address?: string;
-}
-
-interface ChildProfile extends AthleteProfile {
-  parent: string;
-}
+import { Profile } from '../types/api';
 
 export function useProfile() {
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -52,25 +12,9 @@ export function useProfile() {
     setError(null);
     
     try {
-      let response;
+      // Используем getMyProfile для получения профиля текущего пользователя
+      const response = await apiClient.getMyProfile();
       
-      switch (role) {
-        case 'trainer':
-          response = await apiClient.getTrainerProfile(username || '');
-          break;
-        case 'athlete':
-          response = await apiClient.getAthleteProfile(username || '');
-          break;
-        case 'parent':
-          response = await apiClient.getParentProfile(username || '');
-          break;
-        case 'child':
-          response = await apiClient.getChildrenProfile(username || '');
-          break;
-        default:
-          throw new Error('Неизвестная роль пользователя');
-      }
-
       if (response.data) {
         setProfile(response.data as Profile);
       } else {

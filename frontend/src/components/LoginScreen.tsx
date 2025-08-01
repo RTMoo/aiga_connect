@@ -20,9 +20,11 @@ import {
   Shield,
   Users,
   Trophy,
+  AlertCircle,
 } from "lucide-react";
 import { LoadingSpinner } from "./ui/loading-spinner";
 import { UserRole } from "./AppNavigation";
+import { useAuth } from "../hooks/useAuth";
 
 interface LoginScreenProps {
   onLogin: (role: UserRole) => void;
@@ -34,17 +36,27 @@ export function LoginScreen({ onLogin, onShowAuth }: LoginScreenProps) {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError(null);
 
-    // Здесь будет логика входа через API
-    // Пока используем мок для демонстрации
-    setTimeout(() => {
-      onLogin("athlete");
+    try {
+      const result = await login(email, password);
+      if (result.success) {
+        onLogin("athlete"); // Роль будет получена из API
+      } else {
+        setError(result.error || "Ошибка входа");
+      }
+    } catch (error) {
+      setError("Ошибка сети");
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   const handleDemoLogin = (role: UserRole) => {
@@ -76,6 +88,14 @@ export function LoginScreen({ onLogin, onShowAuth }: LoginScreenProps) {
           </CardHeader>
 
           <CardContent className="space-y-6">
+            {/* Error Display */}
+            {error && (
+              <div className="p-3 bg-destructive/20 border border-destructive/50 rounded-lg flex items-center space-x-2">
+                <AlertCircle className="w-4 h-4 text-destructive" />
+                <p className="text-destructive text-sm">{error}</p>
+              </div>
+            )}
+
             {/* Login Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
@@ -92,6 +112,7 @@ export function LoginScreen({ onLogin, onShowAuth }: LoginScreenProps) {
                     onChange={(e) => setEmail(e.target.value)}
                     className="pl-10 bg-background/50 border-border/50 text-black !text-black placeholder:text-muted-foreground"
                     required
+                    disabled={isLoading}
                   />
                 </div>
               </div>
@@ -110,6 +131,7 @@ export function LoginScreen({ onLogin, onShowAuth }: LoginScreenProps) {
                     onChange={(e) => setPassword(e.target.value)}
                     className="pl-10 pr-10 bg-background/50 border-border/50 text-black !text-black placeholder:text-muted-foreground"
                     required
+                    disabled={isLoading}
                   />
                   <Button
                     type="button"
@@ -117,6 +139,7 @@ export function LoginScreen({ onLogin, onShowAuth }: LoginScreenProps) {
                     size="sm"
                     className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                     onClick={() => setShowPassword(!showPassword)}
+                    disabled={isLoading}
                   >
                     {showPassword ? (
                       <EyeOff className="w-4 h-4 text-muted-foreground" />
@@ -156,6 +179,7 @@ export function LoginScreen({ onLogin, onShowAuth }: LoginScreenProps) {
                   variant="outline"
                   onClick={() => handleDemoLogin("athlete")}
                   className="bg-background/50 border-border/50 text-white hover:bg-background/70"
+                  disabled={isLoading}
                 >
                   <Trophy className="w-4 h-4 mr-2" />
                   Спортсмен
@@ -165,6 +189,7 @@ export function LoginScreen({ onLogin, onShowAuth }: LoginScreenProps) {
                   variant="outline"
                   onClick={() => handleDemoLogin("coach")}
                   className="bg-background/50 border-border/50 text-white hover:bg-background/70"
+                  disabled={isLoading}
                 >
                   <Shield className="w-4 h-4 mr-2" />
                   Тренер
@@ -174,6 +199,7 @@ export function LoginScreen({ onLogin, onShowAuth }: LoginScreenProps) {
                   variant="outline"
                   onClick={() => handleDemoLogin("parent")}
                   className="bg-background/50 border-border/50 text-white hover:bg-background/70"
+                  disabled={isLoading}
                 >
                   <Users className="w-4 h-4 mr-2" />
                   Родитель
@@ -183,6 +209,7 @@ export function LoginScreen({ onLogin, onShowAuth }: LoginScreenProps) {
                   variant="outline"
                   onClick={() => handleDemoLogin("athlete")}
                   className="bg-background/50 border-border/50 text-white hover:bg-background/70"
+                  disabled={isLoading}
                 >
                   <User className="w-4 h-4 mr-2" />
                   Ребенок
@@ -200,6 +227,7 @@ export function LoginScreen({ onLogin, onShowAuth }: LoginScreenProps) {
                   variant="link"
                   onClick={onShowAuth}
                   className="p-0 h-auto text-primary hover:text-primary/80"
+                  disabled={isLoading}
                 >
                   Создать аккаунт
                 </Button>

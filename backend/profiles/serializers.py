@@ -11,6 +11,10 @@ class BaseProfileSerializer(serializers.Serializer):
     username = serializers.CharField(
         max_length=32, source="user.username", read_only=True
     )
+    user_id = serializers.IntegerField(source="user.id", read_only=True)
+    user_email = serializers.CharField(source="user.email", read_only=True)
+    user_role = serializers.CharField(source="user.role", read_only=True)
+    user_email_verified = serializers.BooleanField(source="user.email_verified", read_only=True)
     first_name = serializers.CharField(max_length=32)
     last_name = serializers.CharField(max_length=32)
     birth_date = serializers.DateField(required=False, allow_null=True)

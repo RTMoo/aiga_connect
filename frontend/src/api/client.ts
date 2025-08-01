@@ -86,13 +86,35 @@ class ApiClient {
 
   // Profile endpoints
   async getMyProfile() {
-    return this.request<{
-      id: number;
-      email: string;
-      username: string;
-      role: string;
-      email_verified: boolean;
-    }>('/profiles/me/');
+    try {
+      const response = await this.request<{
+        user_id: number;
+        user_email: string;
+        username: string;
+        user_role: string;
+        user_email_verified: boolean;
+        first_name: string;
+        last_name: string;
+        birth_date?: string;
+        phone?: string;
+        updated_at: string;
+        created_at: string;
+      }>('/profiles/me/');
+      
+      console.log("API Client - getMyProfile response:", response);
+      return response;
+    } catch (error) {
+      console.error("API Client - getMyProfile error:", error);
+      // Если профиль не найден (404), возвращаем пустой ответ
+      if (error && typeof error === 'object' && 'status' in error && error.status === 404) {
+        return {
+          data: null,
+          error: "Профиль не найден",
+          status: 404,
+        };
+      }
+      throw error;
+    }
   }
 
   async getTrainerProfile(username: string) {
@@ -190,6 +212,22 @@ class ApiClient {
     return this.request(`/schedules/individual/${sessionId}/finish/`, {
       method: 'POST',
     });
+  }
+
+  // Chat endpoints
+  async getChatList() {
+    return this.request('/chats/');
+  }
+
+  async createChat(toUser: string) {
+    return this.request('/chats/create/', {
+      method: 'POST',
+      body: JSON.stringify({ to_user: toUser }),
+    });
+  }
+
+  async getChatMessages(chatId: number) {
+    return this.request(`/chats/${chatId}/messages/`);
   }
 }
 

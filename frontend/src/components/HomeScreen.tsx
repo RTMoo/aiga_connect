@@ -2,18 +2,18 @@ import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { BottomNavigation } from "./BottomNavigation";
-import { 
-  Clock, 
-  MapPin, 
-  ChevronRight, 
-  Calendar, 
-  TrendingUp, 
-  ShoppingBag, 
-  MessageCircle, 
-  Bell, 
+import {
+  Clock,
+  MapPin,
+  ChevronRight,
+  Calendar,
+  TrendingUp,
+  ShoppingBag,
+  MessageCircle,
+  Bell,
   Users,
   Trophy,
-  Target
+  Target,
 } from "lucide-react";
 import { UserRole, Screen } from "./AppNavigation";
 
@@ -36,20 +36,26 @@ export function HomeScreen({ userRole, user, onNavigate }: HomeScreenProps) {
         id: "schedule",
         title: "Моё расписание",
         icon: Calendar,
-        color: "bg-blue-500/10 text-blue-400"
+        color: "bg-blue-500/10 text-blue-400",
       },
       {
         id: "progress",
         title: "Мой прогресс",
         icon: TrendingUp,
-        color: "bg-green-500/10 text-green-400"
+        color: "bg-green-500/10 text-green-400",
+      },
+      {
+        id: "messaging",
+        title: "Сообщество",
+        icon: MessageCircle,
+        color: "bg-pink-500/10 text-pink-400",
       },
       {
         id: "shop",
         title: "Магазин AIGA",
         icon: ShoppingBag,
-        color: "bg-purple-500/10 text-purple-400"
-      }
+        color: "bg-purple-500/10 text-purple-400",
+      },
     ];
 
     const roleSpecificActions = {
@@ -58,41 +64,49 @@ export function HomeScreen({ userRole, user, onNavigate }: HomeScreenProps) {
           id: "requests",
           title: "Заявки учеников",
           icon: Users,
-          color: "bg-orange-500/10 text-orange-400"
-        }
+          color: "bg-orange-500/10 text-orange-400",
+        },
       ],
       parent: [
         {
           id: "messaging",
           title: "Сообщения",
           icon: MessageCircle,
-          color: "bg-pink-500/10 text-pink-400"
-        }
+          color: "bg-pink-500/10 text-pink-400",
+        },
       ],
       athlete: [
         {
           id: "messaging",
           title: "Сообщество",
           icon: MessageCircle,
-          color: "bg-pink-500/10 text-pink-400"
-        }
-      ]
+          color: "bg-pink-500/10 text-pink-400",
+        },
+      ],
     };
 
     return [
       ...baseActions,
-      ...(roleSpecificActions[userRole as keyof typeof roleSpecificActions] || [])
+      ...(roleSpecificActions[userRole as keyof typeof roleSpecificActions] ||
+        []),
     ];
   };
 
   const getRoleGreeting = () => {
     const username = user?.username || "Пользователь";
-    
+
+    // Отладочная информация
+    console.log("HomeScreen - user:", user);
+    console.log("HomeScreen - username:", username);
+    console.log("HomeScreen - userRole:", userRole);
+
     switch (userRole) {
       case "parent":
         return `Добро пожаловать, ${username}`;
       case "coach":
         return `Добро пожаловать, тренер ${username}`;
+      case "athlete":
+        return `Добро пожаловать, ${username}`;
       default:
         return `Добро пожаловать, ${username}`;
     }
@@ -106,7 +120,7 @@ export function HomeScreen({ userRole, user, onNavigate }: HomeScreenProps) {
           time: "Четверг, 18 апр · 10:00",
           location: "Фитнес-центр Академия",
           participants: "8/10 учеников",
-          status: "подтверждено"
+          status: "подтверждено",
         };
       case "parent":
         return {
@@ -114,7 +128,7 @@ export function HomeScreen({ userRole, user, onNavigate }: HomeScreenProps) {
           time: "Четверг, 18 апр · 17:00",
           location: "Фитнес-центр Академия",
           participants: "Тренировка Амира",
-          status: "подтверждено"
+          status: "подтверждено",
         };
       default:
         return {
@@ -122,7 +136,7 @@ export function HomeScreen({ userRole, user, onNavigate }: HomeScreenProps) {
           time: "Четверг, 18 апр · 17:00",
           location: "Фитнес-центр Академия",
           participants: "12/15 участников",
-          status: "подтверждено"
+          status: "подтверждено",
         };
     }
   };
@@ -146,7 +160,9 @@ export function HomeScreen({ userRole, user, onNavigate }: HomeScreenProps) {
           </Button>
         </div>
         <p className="text-muted-foreground">
-          {userRole === "coach" ? "Управляйте вашей академией" : "Готовы к сегодняшней тренировке?"}
+          {userRole === "coach"
+            ? "Управляйте вашей академией"
+            : "Готовы к сегодняшней тренировке?"}
         </p>
       </div>
 
@@ -185,7 +201,9 @@ export function HomeScreen({ userRole, user, onNavigate }: HomeScreenProps) {
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="text-lg text-white mb-1">Текущий прогресс</h3>
-                <p className="text-muted-foreground">Синий пояс • 65% до фиолетового</p>
+                <p className="text-muted-foreground">
+                  Синий пояс • 65% до фиолетового
+                </p>
               </div>
               <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
                 <Trophy className="w-6 h-6 text-white" />
@@ -210,7 +228,9 @@ export function HomeScreen({ userRole, user, onNavigate }: HomeScreenProps) {
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="text-lg text-white mb-1">Прогресс Амира</h3>
-                <p className="text-muted-foreground">Синий пояс • Отличные результаты</p>
+                <p className="text-muted-foreground">
+                  Синий пояс • Отличные результаты
+                </p>
               </div>
               <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center">
                 <Target className="w-6 h-6 text-white" />
@@ -232,7 +252,9 @@ export function HomeScreen({ userRole, user, onNavigate }: HomeScreenProps) {
         {/* Upcoming Session */}
         <div className="mb-8">
           <h2 className="text-xl text-white mb-4">
-            {userRole === "coach" ? "Следующая тренировка" : "Ближайшая тренировка"}
+            {userRole === "coach"
+              ? "Следующая тренировка"
+              : "Ближайшая тренировка"}
           </h2>
           <Card className="p-6 bg-card border-border">
             <div className="flex justify-between items-start mb-4">
@@ -260,11 +282,13 @@ export function HomeScreen({ userRole, user, onNavigate }: HomeScreenProps) {
                 <Calendar className="w-8 h-8 text-primary-foreground" />
               </div>
             </div>
-            <Button 
+            <Button
               className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl"
               onClick={() => onNavigate("schedule")}
             >
-              {userRole === "coach" ? "Управлять тренировкой" : "Посмотреть детали"}
+              {userRole === "coach"
+                ? "Управлять тренировкой"
+                : "Посмотреть детали"}
             </Button>
           </Card>
         </div>
@@ -282,7 +306,9 @@ export function HomeScreen({ userRole, user, onNavigate }: HomeScreenProps) {
                   onClick={() => onNavigate(action.id as Screen)}
                 >
                   <div className="flex flex-col items-center text-center space-y-3">
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${action.color}`}>
+                    <div
+                      className={`w-12 h-12 rounded-xl flex items-center justify-center ${action.color}`}
+                    >
                       <IconComponent className="w-6 h-6" />
                     </div>
                     <span className="text-white text-sm group-hover:text-primary transition-colors">

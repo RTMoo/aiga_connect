@@ -18,8 +18,6 @@ import {
   Award,
 } from "lucide-react";
 import { UserRole, Screen } from "./AppNavigation";
-import { useProfile } from "../hooks/useProfile";
-import { useEffect } from "react";
 
 interface ProfileScreenProps {
   userRole: UserRole | "";
@@ -40,39 +38,14 @@ export function ProfileScreen({
   onNavigate,
   onLogout,
 }: ProfileScreenProps) {
-  const { profile, isLoading, error, fetchProfile } = useProfile();
-
-  // Загружаем профиль при монтировании компонента
-  useEffect(() => {
-    if (user?.username && user?.role) {
-      fetchProfile(user.role, user.username);
-    }
-  }, [user?.username, user?.role, fetchProfile]);
+  // Отладочная информация
+  console.log("ProfileScreen - userRole:", userRole);
+  console.log("ProfileScreen - user:", user);
 
   const renderCoachProfile = () => {
-    if (isLoading) {
-      return (
-        <div className="flex items-center justify-center py-12">
-          <div className="text-white">Загрузка профиля...</div>
-        </div>
-      );
-    }
-
-    if (error) {
-      return (
-        <div className="flex items-center justify-center py-12">
-          <div className="text-red-400">Ошибка загрузки профиля: {error}</div>
-        </div>
-      );
-    }
-
-    const trainerProfile = profile as any;
-    const fullName = profile
-      ? `${profile.first_name} ${profile.last_name}`
-      : user?.username || "Аслан Кудайбергенов";
-    const initials = profile
-      ? `${profile.first_name?.[0] || ""}${profile.last_name?.[0] || ""}`
-      : "АК";
+    // Используем реальное имя пользователя или fallback
+    const displayName = user?.username || "Аслан Кудайбергенов";
+    const initials = displayName.substring(0, 2).toUpperCase();
 
     return (
       <div className="space-y-6">
@@ -86,7 +59,7 @@ export function ProfileScreen({
               </AvatarFallback>
             </Avatar>
             <div className="flex-1">
-              <h2 className="text-2xl text-white mb-1">{fullName}</h2>
+              <h2 className="text-2xl text-white mb-1">{displayName}</h2>
               <p className="text-muted-foreground mb-2">Главный тренер</p>
               <div className="flex items-center space-x-4 text-sm text-muted-foreground">
                 <div className="flex items-center">
@@ -192,134 +165,122 @@ export function ProfileScreen({
     );
   };
 
-  const renderParentProfile = () => (
-    <div className="space-y-6">
-      {/* Profile Header */}
-      <Card className="p-6 bg-card border-border">
-        <div className="flex items-center space-x-4 mb-4">
-          <Avatar className="w-20 h-20">
-            <AvatarImage src="/placeholder-parent.jpg" />
-            <AvatarFallback className="bg-primary text-primary-foreground text-2xl">
-              ЕН
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex-1">
-            <h2 className="text-2xl text-white mb-1">Елена Назарбаева</h2>
-            <p className="text-muted-foreground mb-2">Родитель</p>
-            <div className="flex items-center text-sm text-muted-foreground">
-              <Mail className="w-4 h-4 mr-1" />
-              elena.nazarbayeva@example.com
-            </div>
-          </div>
-        </div>
-        <Button
-          variant="outline"
-          className="w-full border-border text-muted-foreground hover:text-white"
-        >
-          <Edit className="w-4 h-4 mr-2" />
-          Редактировать профиль
-        </Button>
-      </Card>
+  const renderParentProfile = () => {
+    // Используем реальное имя пользователя или fallback
+    const displayName = user?.username || "Елена Назарбаева";
+    const initials = displayName.substring(0, 2).toUpperCase();
 
-      {/* Child Profile */}
-      <Card className="p-6 bg-card border-border">
-        <h3 className="text-lg text-white mb-4">Информация о ребёнке</h3>
-        <div className="flex items-center space-x-4 mb-4">
-          <Avatar className="w-16 h-16">
-            <AvatarImage src="/placeholder-child.jpg" />
-            <AvatarFallback className="bg-primary/20 text-primary text-lg">
-              АН
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex-1">
-            <h4 className="text-lg text-white mb-1">Амир Назарбаев</h4>
-            <p className="text-muted-foreground mb-2">16 лет • 68 кг</p>
-            <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-              <div className="flex items-center">
-                <Trophy className="w-4 h-4 mr-1" />
-                Синий пояс
-              </div>
-              <div className="flex items-center">
-                <User className="w-4 h-4 mr-1" />
-                Тренер: Аслан К.
+    return (
+      <div className="space-y-6">
+        {/* Profile Header */}
+        <Card className="p-6 bg-card border-border">
+          <div className="flex items-center space-x-4 mb-4">
+            <Avatar className="w-20 h-20">
+              <AvatarImage src="/placeholder-parent.jpg" />
+              <AvatarFallback className="bg-primary text-primary-foreground text-2xl">
+                {initials}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex-1">
+              <h2 className="text-2xl text-white mb-1">{displayName}</h2>
+              <p className="text-muted-foreground mb-2">Родитель</p>
+              <div className="flex items-center text-sm text-muted-foreground">
+                <Mail className="w-4 h-4 mr-1" />
+                {user?.email || "elena.nazarbayeva@example.com"}
               </div>
             </div>
           </div>
-        </div>
-        <Button
-          variant="outline"
-          className="w-full border-border text-muted-foreground hover:text-white"
-        >
-          Сменить тренера
-        </Button>
-      </Card>
+          <Button
+            variant="outline"
+            className="w-full border-border text-muted-foreground hover:text-white"
+          >
+            <Edit className="w-4 h-4 mr-2" />
+            Редактировать профиль
+          </Button>
+        </Card>
 
-      {/* Recent Activity */}
-      <Card className="p-6 bg-card border-border">
-        <h3 className="text-lg text-white mb-4">Последняя активность</h3>
-        <div className="space-y-3">
-          {[
-            {
-              action: "Завершил тренировку",
-              time: "2 часа назад",
-              type: "success",
-            },
-            {
-              action: "Пропустил тренировку",
-              time: "1 день назад",
-              type: "warning",
-            },
-            {
-              action: "Обновление прогресса от тренера",
-              time: "3 дня назад",
-              type: "info",
-            },
-          ].map((activity, index) => (
-            <div key={index} className="flex items-center space-x-3">
-              <div
-                className={`w-2 h-2 rounded-full ${
-                  activity.type === "success"
-                    ? "bg-green-500"
-                    : activity.type === "warning"
-                    ? "bg-yellow-500"
-                    : "bg-blue-500"
-                }`}
-              />
-              <div className="flex-1">
-                <p className="text-white text-sm">{activity.action}</p>
-                <p className="text-muted-foreground text-xs">{activity.time}</p>
+        {/* Child Profile */}
+        <Card className="p-6 bg-card border-border">
+          <h3 className="text-lg text-white mb-4">Информация о ребёнке</h3>
+          <div className="flex items-center space-x-4 mb-4">
+            <Avatar className="w-16 h-16">
+              <AvatarImage src="/placeholder-child.jpg" />
+              <AvatarFallback className="bg-primary/20 text-primary text-lg">
+                АН
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex-1">
+              <h4 className="text-lg text-white mb-1">Амир Назарбаев</h4>
+              <p className="text-muted-foreground mb-2">16 лет • 68 кг</p>
+              <div className="flex items-center space-x-4 text-sm text-muted-foreground">
+                <div className="flex items-center">
+                  <Trophy className="w-4 h-4 mr-1" />
+                  Синий пояс
+                </div>
+                <div className="flex items-center">
+                  <User className="w-4 h-4 mr-1" />
+                  Тренер: Аслан К.
+                </div>
               </div>
             </div>
-          ))}
-        </div>
-      </Card>
-    </div>
-  );
+          </div>
+          <Button
+            variant="outline"
+            className="w-full border-border text-muted-foreground hover:text-white"
+          >
+            Сменить тренера
+          </Button>
+        </Card>
+
+        {/* Recent Activity */}
+        <Card className="p-6 bg-card border-border">
+          <h3 className="text-lg text-white mb-4">Последняя активность</h3>
+          <div className="space-y-3">
+            {[
+              {
+                action: "Завершил тренировку",
+                time: "2 часа назад",
+                type: "success",
+              },
+              {
+                action: "Пропустил тренировку",
+                time: "1 день назад",
+                type: "warning",
+              },
+              {
+                action: "Обновление прогресса от тренера",
+                time: "3 дня назад",
+                type: "info",
+              },
+            ].map((activity, index) => (
+              <div key={index} className="flex items-center space-x-3">
+                <div
+                  className={`w-2 h-2 rounded-full ${
+                    activity.type === "success"
+                      ? "bg-green-500"
+                      : activity.type === "warning"
+                      ? "bg-yellow-500"
+                      : "bg-blue-500"
+                  }`}
+                />
+                <div className="flex-1">
+                  <p className="text-white text-sm">{activity.action}</p>
+                  <p className="text-muted-foreground text-xs">
+                    {activity.time}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </div>
+    );
+  };
 
   const renderAthleteProfile = () => {
-    if (isLoading) {
-      return (
-        <div className="flex items-center justify-center py-12">
-          <div className="text-white">Загрузка профиля...</div>
-        </div>
-      );
-    }
-
-    if (error) {
-      return (
-        <div className="flex items-center justify-center py-12">
-          <div className="text-red-400">Ошибка загрузки профиля: {error}</div>
-        </div>
-      );
-    }
-
-    const athleteProfile = profile as any;
-    const fullName = profile
-      ? `${profile.first_name} ${profile.last_name}`
-      : user?.username || "Амир Назарбаев";
-    const initials = profile
-      ? `${profile.first_name?.[0] || ""}${profile.last_name?.[0] || ""}`
-      : "АН";
+    // Используем реальное имя пользователя или fallback
+    const displayName = user?.username || "Амир Назарбаев";
+    const initials = displayName.substring(0, 2).toUpperCase();
 
     return (
       <div className="space-y-6">
@@ -333,19 +294,16 @@ export function ProfileScreen({
               </AvatarFallback>
             </Avatar>
             <div className="flex-1">
-              <h2 className="text-2xl text-white mb-1">{fullName}</h2>
+              <h2 className="text-2xl text-white mb-1">{displayName}</h2>
               <p className="text-muted-foreground mb-2">Спортсмен</p>
               <div className="flex items-center space-x-4 text-sm text-muted-foreground">
                 <div className="flex items-center">
                   <Trophy className="w-4 h-4 mr-1" />
-                  {athleteProfile?.belt_grade || "Синий пояс"}
+                  Синий пояс
                 </div>
                 <div className="flex items-center">
                   <Calendar className="w-4 h-4 mr-1" />
-                  Участник с{" "}
-                  {profile?.created_at
-                    ? new Date(profile.created_at).getFullYear()
-                    : "2022"}
+                  Участник с 2022
                 </div>
               </div>
             </div>
@@ -430,6 +388,19 @@ export function ProfileScreen({
     );
   };
 
+  const renderProfile = () => {
+    switch (userRole) {
+      case "coach":
+        return renderCoachProfile();
+      case "parent":
+        return renderParentProfile();
+      case "athlete":
+        return renderAthleteProfile();
+      default:
+        return renderAthleteProfile();
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
@@ -457,11 +428,7 @@ export function ProfileScreen({
       </div>
 
       {/* Content */}
-      <div className="flex-1 px-6 pb-24">
-        {userRole === "coach" && renderCoachProfile()}
-        {userRole === "parent" && renderParentProfile()}
-        {userRole === "athlete" && renderAthleteProfile()}
-      </div>
+      <div className="flex-1 px-6 pb-24">{renderProfile()}</div>
 
       <BottomNavigation currentScreen="profile" onNavigate={onNavigate} />
     </div>
