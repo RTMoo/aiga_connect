@@ -10,18 +10,8 @@ import { MessagingScreen } from "./MessagingScreen";
 import { ShopScreen } from "./ShopScreen";
 import { AuthScreen } from "./AuthScreen";
 
-export type UserRole = "parent" | "coach" | "athlete" | "trainer";
-export type Screen =
-  | "login"
-  | "auth"
-  | "home"
-  | "schedule"
-  | "profile"
-  | "progress"
-  | "notifications"
-  | "requests"
-  | "messaging"
-  | "shop";
+export type UserRole = "parent" | "coach" | "athlete";
+export type Screen = "login" | "auth" | "home" | "schedule" | "profile" | "progress" | "notifications" | "requests" | "messaging" | "shop";
 
 interface AppNavigationProps {
   currentScreen: Screen;
@@ -31,58 +21,31 @@ interface AppNavigationProps {
   onLogout: () => void;
 }
 
-export function AppNavigation({
-  currentScreen,
-  userRole,
-  onNavigate,
-  onLogin,
-  onLogout,
+export function AppNavigation({ 
+  currentScreen, 
+  userRole, 
+  onNavigate, 
+  onLogin, 
+  onLogout 
 }: AppNavigationProps) {
   const [authMode, setAuthMode] = useState<"login" | "register">("login");
-
-  const handleSwitchAuthMode = (newMode: "login" | "register") => {
-    setAuthMode(newMode);
-  };
 
   const renderScreen = () => {
     switch (currentScreen) {
       case "login":
-        return (
-          <LoginScreen
-            onLogin={onLogin}
-            onShowAuth={() => {
-              setAuthMode("register");
-              onNavigate("auth");
-            }}
-          />
-        );
+        return <LoginScreen onLogin={onLogin} onShowAuth={() => onNavigate("auth")} />;
       case "auth":
-        return (
-          <AuthScreen
-            mode={authMode}
-            onBack={() => onNavigate("login")}
-            onLogin={onLogin}
-            onSwitchMode={handleSwitchAuthMode}
-          />
-        );
+        return <AuthScreen mode={authMode} onBack={() => onNavigate("login")} onLogin={onLogin} />;
       case "home":
         return <HomeScreen userRole={userRole} onNavigate={onNavigate} />;
       case "schedule":
         return <ScheduleScreen userRole={userRole} onNavigate={onNavigate} />;
       case "profile":
-        return (
-          <ProfileScreen
-            userRole={userRole}
-            onNavigate={onNavigate}
-            onLogout={onLogout}
-          />
-        );
+        return <ProfileScreen userRole={userRole} onNavigate={onNavigate} onLogout={onLogout} />;
       case "progress":
         return <ProgressScreen userRole={userRole} onNavigate={onNavigate} />;
       case "notifications":
-        return (
-          <NotificationsScreen userRole={userRole} onNavigate={onNavigate} />
-        );
+        return <NotificationsScreen userRole={userRole} onNavigate={onNavigate} />;
       case "requests":
         return <RequestsScreen userRole={userRole} onNavigate={onNavigate} />;
       case "messaging":

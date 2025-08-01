@@ -2,11 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap");
 
 :root {
+  --font-size: 14px;
   --background: #ffffff;
   --foreground: #000000;
+  --card: #ffffff;
+  --card-foreground: #000000;
+  --popover: #ffffff;
+  --popover-foreground: #000000;
   --primary: #030213;
   --primary-foreground: #ffffff;
   --secondary: #f3f4f6;
@@ -19,20 +24,41 @@
   --destructive-foreground: #ffffff;
   --border: rgba(0, 0, 0, 0.1);
   --input: transparent;
+  --input-background: #f3f3f5;
+  --switch-background: #cbced4;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
   --ring: #030213;
+  --chart-1: #f97316;
+  --chart-2: #06b6d4;
+  --chart-3: #6366f1;
+  --chart-4: #fbbf24;
+  --chart-5: #ec4899;
   --radius: 0.625rem;
-  
+  --sidebar: #ffffff;
+  --sidebar-foreground: #000000;
+  --sidebar-primary: #030213;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f8f9fa;
+  --sidebar-accent-foreground: #374151;
+  --sidebar-border: #e5e7eb;
+  --sidebar-ring: #030213;
+
   /* AIGA Connect Custom Variables */
-  --aiga-red: #B20000;
+  --aiga-red: #b20000;
   --aiga-dark: #121212;
-  --aiga-dark-card: #1E1E1E;
+  --aiga-dark-card: #1e1e1e;
   --aiga-gray: #333333;
-  --aiga-text-secondary: #B0B0B0;
+  --aiga-text-secondary: #b0b0b0;
 }
 
 .dark {
   --background: var(--aiga-dark);
   --foreground: #ffffff;
+  --card: var(--aiga-dark-card);
+  --card-foreground: #ffffff;
+  --popover: var(--aiga-dark-card);
+  --popover-foreground: #ffffff;
   --primary: var(--aiga-red);
   --primary-foreground: #ffffff;
   --secondary: var(--aiga-gray);
@@ -46,6 +72,21 @@
   --border: var(--aiga-gray);
   --input: var(--aiga-gray);
   --ring: var(--aiga-red);
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --chart-1: #f97316;
+  --chart-2: #06b6d4;
+  --chart-3: #6366f1;
+  --chart-4: #fbbf24;
+  --chart-5: #ec4899;
+  --sidebar: #1f2937;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #6366f1;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #374151;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #374151;
+  --sidebar-ring: #6366f1;
 }
 
 @layer base {
@@ -55,7 +96,11 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: "Montserrat", -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  html {
+    font-size: var(--font-size);
   }
 }
 
@@ -63,7 +108,7 @@
   .btn-primary {
     @apply bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md font-medium;
   }
-  
+
   .btn-secondary {
     @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 px-4 py-2 rounded-md font-medium;
   }

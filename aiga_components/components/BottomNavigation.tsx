@@ -6,24 +6,21 @@ interface BottomNavigationProps {
   onNavigate: (screen: Screen) => void;
 }
 
-export function BottomNavigation({
-  currentScreen,
-  onNavigate,
-}: BottomNavigationProps) {
+export function BottomNavigation({ currentScreen, onNavigate }: BottomNavigationProps) {
   const navItems = [
     { id: "home", label: "Главная", icon: Home },
     { id: "schedule", label: "Расписание", icon: Calendar },
     { id: "progress", label: "Прогресс", icon: TrendingUp },
-    { id: "profile", label: "Профиль", icon: User },
+    { id: "profile", label: "Профиль", icon: User }
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-black/70 border-t border-border backdrop-blur-sm">
+    <div className="fixed bottom-0 left-0 right-0 bg-card border-t border-border">
       <div className="flex items-center justify-around py-2">
         {navItems.map((item) => {
           const IconComponent = item.icon;
           const isActive = currentScreen === item.id;
-
+          
           return (
             <button
               key={item.id}
