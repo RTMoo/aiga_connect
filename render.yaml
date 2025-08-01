@@ -1,7 +1,7 @@
 services:
   - type: web
     name: backend
-    env: docker
+    env: docker-compose
     plan: free
     buildCommand: docker-compose build
     startCommand: docker-compose up backend
@@ -9,7 +9,7 @@ services:
 
   - type: worker
     name: celery
-    env: docker
+    env: docker-compose
     plan: free
     buildCommand: docker-compose build
     startCommand: docker-compose up celery
