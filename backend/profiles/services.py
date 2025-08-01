@@ -1,5 +1,5 @@
 from typing import Any, Union
-from profiles.models import ChildProfile, ParentProfile, TrainerProfile
+from profiles.models import ChildProfile, ParentProfile, TrainerProfile, AthleteProfile
 from accounts.models import User
 
 
@@ -7,6 +7,7 @@ MODEL = {
     User.RoleChoices.PARENT: ParentProfile,
     User.RoleChoices.CHILD: ChildProfile,
     User.RoleChoices.TRAINER: TrainerProfile,
+    User.RoleChoices.ATHLETE: AthleteProfile,
 }
 
 
